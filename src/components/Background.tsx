@@ -11,7 +11,7 @@ const Background = () => {
             <div className="container d-flex justify-content-center align-items-center h-100">
               <div className="row">
                 <div className="col-12 text-center">
-                  <h1 className="mb-0 fw-bold text-black display-1">Riva</h1>
+                  <h1 className="mb-0 fw-bold text-black display-1">Eren</h1>
                 </div>
               </div>
             </div>
