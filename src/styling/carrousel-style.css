@@ -1,0 +1,10 @@
+#photogallery{
+    height: 120vh;
+    background-color: bisque;
+}
+
+.centeringContainerStyle{
+    display: flex;
+    align-items: center;
+    justify-content: center;    
+}
