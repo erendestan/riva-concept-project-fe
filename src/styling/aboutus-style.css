@@ -1,0 +1,10 @@
+#aboutus{
+    height: 120vh;
+    background-color: bisque;
+}
+
+h2{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
