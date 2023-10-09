@@ -1,25 +1,18 @@
 import React from 'react'
-import {Routes, Route} from "react-router-dom"
-import Background from './components/Background'
-import Carrousel from './components/Carrousel'
+import { Route, Routes, BrowserRouter as Router } from "react-router-dom";
 import NavbarRiva from './components/Navbar'
-import AboutUs from './components/AboutUs'
-// import Home from './pages/Home'
-// import CreateAccountPage from './pages/CreateAccountPage'
-
+import Home from './pages/Home'
 
 const App = () => {
   return (
-    <>
-    {/* <Routes>
-      <Route path='/' element={<App></App>}/>
-      <Route path='/createaccount' element={<CreateAccountPage></CreateAccountPage>}/>
-    </Routes> */}
-    <NavbarRiva></NavbarRiva>
-    <Background></Background>
-    <AboutUs></AboutUs>
-    <Carrousel></Carrousel>
-    </>
+    <div className='App'>
+    <Router>
+      <NavbarRiva/>
+      <Routes>
+        <Route path="/" element={<Home/>}/>
+      </Routes>
+    </Router>
+    </div>
   )
 }
 
