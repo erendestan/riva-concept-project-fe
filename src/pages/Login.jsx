@@ -1,13 +1,14 @@
 import React from "react";
 import NavbarRiva from "../components/Navbar";
+import LogIn from "../components/LogIn";
 
-const CreateAccountPage = () => {
+const LogInPage = () => {
   return (
     <>
       <NavbarRiva></NavbarRiva>
-      <h1>Create Account</h1>
+      <LogIn></LogIn>
     </>
   );
 };
 
-export default CreateAccountPage;
+export default LogInPage;

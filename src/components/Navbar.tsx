@@ -56,13 +56,13 @@ const links = [
   },
   {
     id: 7,
-    path: "/signup",
-    text: "Sign Up",
+    path: "/login",
+    text: "Login",
   },
   {
     id: 8,
-    path: "/signin",
-    text: "Sign In",
+    path: "/createaccount",
+    text: "Create Account",
   },
 ];
 

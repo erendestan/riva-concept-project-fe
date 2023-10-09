@@ -1,7 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
-import CreateAccountPage from './pages/CreateAccountPage.tsx'
 import "bootstrap/dist/css/bootstrap.min.css"
 import { createBrowserRouter } from 'react-router-dom'
 import path from 'path'
