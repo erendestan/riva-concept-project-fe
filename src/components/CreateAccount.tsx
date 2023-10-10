@@ -10,6 +10,8 @@ import {
   MDBInput,
 } from "mdb-react-ui-kit";
 
+// function
+
 const CreateAccount = () => {
   return (
     <MDBContainer fluid>
