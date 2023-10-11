@@ -1,9 +1,9 @@
 import React from 'react'
 import { Route, Routes, BrowserRouter as Router } from "react-router-dom";
 import NavbarRiva from './components/Navbar'
-import Home from './pages/Home'
-import LogIn from './components/LogIn';
-import CreateAccount from './components/CreateAccount';
+import HomePage from './pages/HomePage'
+import LogInPage from './pages/LoginPage';
+import CreateAccountPage from './pages/CreateAccountPage';
 
 const App = () => {
   return (
@@ -11,9 +11,9 @@ const App = () => {
     <Router>
       <NavbarRiva/>
       <Routes>
-        <Route path="/" element={<Home/>}/>
-        <Route path="/login" element={<LogIn/>}/>
-        <Route path="/createaccount" element={<CreateAccount/>}/>
+        <Route path="/" element={<HomePage/>}/>
+        <Route path="/login" element={<LogInPage/>}/>
+        <Route path="/createaccount" element={<CreateAccountPage/>}/>
       </Routes>
     </Router>
     </div>
