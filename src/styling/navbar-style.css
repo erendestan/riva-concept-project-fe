@@ -1,3 +1,21 @@
 .navbar{
     background-color: rgba(8, 8, 8, 0.279);
 }
+
+.hover-animation{
+    background-color: transparent;
+  color: #000000; /* Set the initial text color */
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.hover-animation:hover {
+    /* Specify the changes you want on hover here */
+    background-color: #007bff; /* Change the background color on hover */
+    color: #ffffff; /* Change the text color on hover */
+  } 
+
+/* .nav-link:hover {
+    background-color: #007bff;
+    color: black; 
+    transition: background-color 0.8s ease, color 0.8s ease;
+  } */
