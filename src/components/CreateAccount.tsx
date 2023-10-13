@@ -20,7 +20,7 @@ function CreateAccount() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
-  const [role, setRole] = useState("");
+  // const [role, setRole] = useState("");
 
   const [passwordMatch, setPasswordMatch] = useState(true); // Password match state
 
@@ -50,8 +50,8 @@ function CreateAccount() {
         })
         .catch((error) => {
           if (
-            error.response.status == 400 &&
-            error.response.data.errors[0].error == "EMAIL_ALREADY_IN_SYSTEM"
+            error.response.status == 400
+            //&&  error.response.data.errors[0].error == "EMAIL_ALREADY_IN_SYSTEM"
           ) {
             alert("The email you entered is already in our system.");
           } else {
@@ -61,16 +61,6 @@ function CreateAccount() {
     } else {
       setPasswordMatch(false);
     }
-    // } catch (error) {
-    //   if (
-    //     error.response.status == 400 &&
-    //     error.response.data.errors[0].error == "EMAIL_ALREADY_IN_SYSTEM"
-    //   ) {
-    //     alert("The email you entered is already in our system.");
-    //   } else {
-    //     alert("Something went wrong!");
-    //   }
-    // }
   };
 
   return (

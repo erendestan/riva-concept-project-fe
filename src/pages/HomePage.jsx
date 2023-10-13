@@ -7,7 +7,6 @@ import AboutUs from "../components/AboutUs";
 const Home = () => {
   return (
     <>
-      <NavbarRiva></NavbarRiva>
       <Background></Background>
       <AboutUs></AboutUs>
       <Carrousel></Carrousel>

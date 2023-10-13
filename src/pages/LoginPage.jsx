@@ -5,7 +5,6 @@ import LogIn from "../components/LogIn";
 const LogInPage = () => {
   return (
     <>
-      <NavbarRiva></NavbarRiva>
       <LogIn></LogIn>
     </>
   );
