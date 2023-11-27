@@ -36,7 +36,7 @@ function CreateAccount() {
       phoneNumber: phoneNumber,
       password: password,
       repeatPassword: repeatPassword,
-      role: "Customer",
+      role: "CUSTOMER",
     };
 
     // try {
