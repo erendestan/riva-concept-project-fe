@@ -6,6 +6,7 @@ import CreateAccountPage from './pages/CreateAccountPage';
 import LogInPage from './pages/LoginPage';
 import AdminUserPanel from './pages/AdminUserPanelPage';
 import AdminUserPanelPage from './pages/AdminUserPanelPage';
+import AddUserPage from './pages/AddUserPage';
 
 const App = () => {
   return (
@@ -17,6 +18,7 @@ const App = () => {
         <Route path="/login" element={<LogInPage/>}/>
         <Route path="/createaccount" element={<CreateAccountPage/>}/>
         <Route path='/adminuserpanel' element={<AdminUserPanelPage/>}/>
+        <Route path='/addUser' element={<AddUserPage/>}/>
       </Routes>
     </Router>
     </div>

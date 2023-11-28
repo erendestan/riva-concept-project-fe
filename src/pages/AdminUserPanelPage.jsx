@@ -37,10 +37,6 @@ export default function AdminUserPanelPage(props){
     return (
       <div className='container'>
         <div className="row">
-          {/* <div className="col-md-6 mt-2">
-            <Search employeeItems={employeeItems} setSearchedEmployees={setSearchedEmployees} setIsDataReady={setIsDataReady} />
-          </div> */}
-          {/* <Search userItems={userItems} setSearchedUsers={setSearchedUsers}/> */}
           <div className="col-md-6 mt-2">
               <SearchComponent userItems={userItems} setSearchedUsers={setSearchedUsers} setIsDataReady={setIsDataReady}/>
           </div>

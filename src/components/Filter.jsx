@@ -14,7 +14,7 @@ export default function Filter(props){
     }
 
     const containerStyle = {
-        maxHeight: '500px', // Change this value to your desired maximum height
+        maxHeight: '500px',
         overflowY: 'auto',
         marginTop: '70px',
         marginBottom: '20px'
@@ -28,7 +28,7 @@ export default function Filter(props){
         onChange={handleChange }
         >
         <option value="true">Active</option>
-        <option value="false">InActive</option>
+        <option value="false">Inactive</option>
         </select>
     </div>
     )

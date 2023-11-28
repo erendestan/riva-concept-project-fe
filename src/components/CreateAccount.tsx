@@ -20,6 +20,7 @@ function CreateAccount() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
+  // const [isActive, setIsActive] = useState("");
   // const [role, setRole] = useState("");
 
   const [passwordMatch, setPasswordMatch] = useState(true); // Password match state
@@ -37,6 +38,7 @@ function CreateAccount() {
       password: password,
       repeatPassword: repeatPassword,
       role: "CUSTOMER",
+      isActive: true,
     };
 
     // try {

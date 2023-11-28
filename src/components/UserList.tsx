@@ -18,14 +18,16 @@ export default function UserList(props) {
           </tr>
         </thead>
         <tbody>
-          {userItems.map((user) => (
-            <UserItem
-              key={user.id}
-              user={user}
-              isActive={isActive}
-              refreshList={refreshList}
-            />
-          ))}
+          {userItems
+            .filter((user) => (user.isActive = isActive))
+            .map((user) => (
+              <UserItem
+                key={user.id}
+                user={user}
+                isActive={isActive}
+                refreshList={refreshList}
+              />
+            ))}
         </tbody>
       </table>
     </div>
