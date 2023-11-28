@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 // import { Navbar, Nav, Container } from "react-bootstrap";
+import TokenManager from "../api/TokenManager";
 import "../styling/navbar-style.css";
 import RivaLogo from "../assets/images/logo.png";
 import Container from "react-bootstrap/Container";
@@ -64,72 +65,148 @@ const links = [
     path: "/createaccount",
     text: "Create Account",
   },
+  {
+    id: 9,
+    path: "/",
+    text: "Log Out",
+  },
 ];
 
 const NavbarRiva = () => {
+  const isAuthenticated = TokenManager.isAuthenticated();
+
   return (
     <Navbar collapseOnSelect expand="lg" className="fixed-top navbar-scroll">
       <Container>
-        <Navbar.Brand href="#home">
+        <Navbar.Brand href="/">
           <img src={RivaLogo} alt="Riva Logo" width="50" height="50" />
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
-          {/* <Nav className="me-auto"> */}
-          {links.map((link) => {
-            if (link.id < 4) {
-              return (
-                <Nav className="me-auto" key={link.id}>
-                  {
-                    <Nav.Link className="text-white" href={link.path}>
-                      {link.text}
-                    </Nav.Link>
-                  }
-                </Nav>
-              );
-            }
-            if (link.id > 3 && link.id < 7) {
-              if (link.id !== 6) {
-                return (
-                  <Nav key={link.id}>
-                    <Nav.Link
-                      eventKey={link.eventkey}
-                      className="hover-animation"
-                      href={link.path}
-                    >
-                      {link.icon}
-                    </Nav.Link>
-                  </Nav>
-                );
-              } else {
-                return (
-                  <Nav key={link.id}>
-                    <Nav.Link
-                      eventKey={link.eventkey}
-                      className="hover-animation text-white"
-                      href={link.path}
-                    >
-                      {link.icon}
-                      <span> </span>
-                      {link.text}
-                    </Nav.Link>
-                  </Nav>
-                );
-              }
-            } else {
-              return (
-                <Nav key={link.id}>
-                  <Nav.Link href={link.path}>
-                    <Button variant="primary">{link.text}</Button>
+          {links.map((link) => (
+            <React.Fragment key={link.id}>
+              {link.id < 4 && (
+                <Nav className="me-auto">
+                  <Nav.Link className="text-white" href={link.path}>
+                    {link.text}
                   </Nav.Link>
                 </Nav>
-              );
-            }
-          })}
+              )}
+              {link.id > 3 && link.id < 7 && (
+                <Nav>
+                  <Nav.Link
+                    eventKey={link.eventkey}
+                    className={`hover-animation ${
+                      link.id === 6 ? "text-white" : ""
+                    }`}
+                    href={link.path}
+                  >
+                    {link.icon}
+                    {link.id === 6 && <span> {link.text}</span>}
+                  </Nav.Link>
+                </Nav>
+              )}
+              {link.id === 9 && (
+                <Nav>
+                  <Nav.Link href={link.path}>
+                    {isAuthenticated ? (
+                      <Button variant="primary" onClick={TokenManager.clear}>
+                        {link.text}
+                      </Button>
+                    ) : null}
+                  </Nav.Link>
+                </Nav>
+              )}
+              {link.id !== 9 &&
+                link.id > 6 &&
+                link.id < 9 &&
+                !isAuthenticated && (
+                  <Nav>
+                    <Nav.Link href={link.path}>
+                      <Button variant="primary">{link.text}</Button>
+                    </Nav.Link>
+                  </Nav>
+                )}
+            </React.Fragment>
+          ))}
         </Navbar.Collapse>
       </Container>
     </Navbar>
   );
+
+  // return (
+  //   <Navbar collapseOnSelect expand="lg" className="fixed-top navbar-scroll">
+  //     <Container>
+  //       <Navbar.Brand href="/">
+  //         <img src={RivaLogo} alt="Riva Logo" width="50" height="50" />
+  //       </Navbar.Brand>
+  //       <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+  //       <Navbar.Collapse id="responsive-navbar-nav">
+  //         {/* <Nav className="me-auto"> */}
+  //         {links.map((link) => {
+  //           if (link.id < 4) {
+  //             return (
+  //               <Nav className="me-auto" key={link.id}>
+  //                 {
+  //                   <Nav.Link className="text-white" href={link.path}>
+  //                     {link.text}
+  //                   </Nav.Link>
+  //                 }
+  //               </Nav>
+  //             );
+  //           }
+  //           if (link.id > 3 && link.id < 7) {
+  //             if (link.id !== 6) {
+  //               return (
+  //                 <Nav key={link.id}>
+  //                   <Nav.Link
+  //                     eventKey={link.eventkey}
+  //                     className="hover-animation"
+  //                     href={link.path}
+  //                   >
+  //                     {link.icon}
+  //                   </Nav.Link>
+  //                 </Nav>
+  //               );
+  //             } else {
+  //               return (
+  //                 <Nav key={link.id}>
+  //                   <Nav.Link
+  //                     eventKey={link.eventkey}
+  //                     className="hover-animation text-white"
+  //                     href={link.path}
+  //                   >
+  //                     {link.icon}
+  //                     <span> </span>
+  //                     {link.text}
+  //                   </Nav.Link>
+  //                 </Nav>
+  //               );
+  //             }
+  //           } else {
+  //             if (isAuthenticated) {
+  //               return (
+  //                 <Nav key={link.id}>
+  //                   <Button variant="primary" onClick={TokenManager.clear}>
+  //                     {link.text}
+  //                   </Button>
+  //                 </Nav>
+  //               );
+  //             } else {
+  //               return (
+  //                 <Nav key={link.id}>
+  //                   <Nav.Link href={link.path}>
+  //                     <Button variant="primary">{link.text}</Button>
+  //                   </Nav.Link>
+  //                 </Nav>
+  //               );
+  //             }
+  //           }
+  //         })}
+  //       </Navbar.Collapse>
+  //     </Container>
+  //   </Navbar>
+  // );
 };
 
 export default NavbarRiva;

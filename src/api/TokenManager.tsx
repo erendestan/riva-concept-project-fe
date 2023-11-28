@@ -20,6 +20,12 @@ const TokenManager = {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("claims");
   },
+
+  isAuthenticated: () => {
+    // Check if the access token exists
+    const accessToken = localStorage.getItem("accessToken");
+    return accessToken !== null;
+  },
 };
 
 export default TokenManager;

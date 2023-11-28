@@ -4,25 +4,41 @@ import { useNavigate } from 'react-router-dom'
 import Filter from '../components/Filter'
 import UserAPI from '../api/UserApi'
 import SearchComponent from '../components/Search'
+import TokenManager from '../api/TokenManager'
+import {toast} from 'react-hot-toast';
 
 export default function AdminUserPanelPage(props){
     const navigate = useNavigate();
     const [isActive, setIsActive] = useState(true);
     const [isDataReady, setIsDataReady] = useState(false);
 
-    const navigateToAddUserPage = () => {
-        navigate('/addUser')
-    };
-
     const [filteredUsers, setFilteredUsers] = useState([]);
 
     const[userItems, SetUserItems] = useState([]);
 
-    
+    const [isAdmin, setIsAdmin] = useState(false);
 
+    const navigateToAddUserPage = () => {
+        navigate('/addUser')
+    };
+
+    const navigateToMainPage = () => {
+      navigate("/")
+    };
+
+    
     useEffect(() => {
+      // Check if the user has the ADMIN role
+      const claims = TokenManager.getClaims();
+      if (claims && claims.roles && claims.roles.includes('ADMIN')) {
+        setIsAdmin(true);
         refreshList();
-    }, []);
+      }else {
+        toast.error('Access Denied!');
+        navigateToMainPage();
+      }
+      
+    }, [navigate]);
 
     const refreshList = () =>{
         UserAPI.getAllUsers()
@@ -33,6 +49,10 @@ export default function AdminUserPanelPage(props){
     const setSearchedUsers = (searchedUsers) => {
       setFilteredUsers(searchedUsers)
     }
+
+    // if(!isAdmin){
+    //   return null;
+    // }
 
     return (
       <div className='container'>

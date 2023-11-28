@@ -11,6 +11,7 @@ import {
   MDBInput,
 } from "mdb-react-ui-kit";
 import AuthAPI from "../api/AuthAPI";
+import { toast } from "react-hot-toast";
 
 // const LogIn = () => {
 //   return (
@@ -84,11 +85,16 @@ export default function LogIn(props) {
     e.preventDefault();
 
     AuthAPI.login(email, password)
-      .then((response) => {
-        alert("Login success!");
-        navigate("/adminuserpanel");
+      .then(({ accessToken, userRole }) => {
+        toast.success("Login success!");
+
+        if (userRole === "ADMIN") {
+          navigate("/adminuserpanel");
+        } else {
+          navigate("/");
+        }
       })
-      .catch(() => alert("Login failed!"))
+      .catch(() => toast.error("Login failed!"))
       .catch((error) => console.error(error));
   };
 

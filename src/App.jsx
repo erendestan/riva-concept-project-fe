@@ -7,10 +7,18 @@ import LogInPage from './pages/LoginPage';
 import AdminUserPanel from './pages/AdminUserPanelPage';
 import AdminUserPanelPage from './pages/AdminUserPanelPage';
 import AddUserPage from './pages/AddUserPage';
+import { Toaster } from 'react-hot-toast';
 
 const App = () => {
   return (
     <div className='App'>
+      <Toaster toastOptions={{
+        style:{
+          background: 'rgb(51 65 85)',
+          color: '#fff'
+        }
+      }}/>
+
     <Router>
       <NavbarRiva/>
       <Routes>

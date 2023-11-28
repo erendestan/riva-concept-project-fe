@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import UserAPI from '../api/UserApi';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import {toast} from 'react-hot-toast';
 
 export default function AddUser(props){
     const navigate = useNavigate();
@@ -28,14 +27,15 @@ export default function AddUser(props){
             !user.password ||
             !user.role
         ){
-            toast("Please fill in all required fields.");
+            toast.error("Please fill in all required fields.");
         } else{
             UserAPI.postUser(user)
             .then(response =>{
-                toast("Added Succesful");
+              toast.success("Added Succesful");
                 navigate('/adminuserpanel')
             })
-            .catch(error => {toast("Failed to add user.")})
+            .catch(error => {
+              toast.error("Failed to add user.")})
         }
     }
 
