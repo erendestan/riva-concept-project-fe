@@ -5,10 +5,8 @@ import UserItem from "./UserItem";
 export default function UserList(props) {
   const { userItems, isActive, refreshList } = props;
 
-  console.log(userItems);
   return (
-    <div>
-      rtyuio
+    <div className="mt-3">
       <table className="table table-striped mt-3">
         <thead className="sticky-top">
           <tr>

@@ -82,7 +82,6 @@ export default function LogIn(props) {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    console.log(email, password, "4r");
 
     AuthAPI.login(email, password)
       .then((response) => {

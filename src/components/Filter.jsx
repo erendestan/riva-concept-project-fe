@@ -12,9 +12,16 @@ export default function Filter(props){
 
         setIsActive(active);
     }
+
+    const containerStyle = {
+        maxHeight: '500px', // Change this value to your desired maximum height
+        overflowY: 'auto',
+        marginTop: '70px',
+        marginBottom: '20px'
+      };
     
     return(
-        <div>
+        <div style={containerStyle}>
         <label htmlFor="position">Filter:</label>
         <select className='mx-2'
         id="position"
