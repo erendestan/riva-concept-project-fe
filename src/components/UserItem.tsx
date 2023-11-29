@@ -12,14 +12,14 @@ export default function UserItem(props) {
   };
 
   const handleUserActiveChange = () => {
-    const updatedUser = { ...user, active: false };
-    console.log("handleUserActiveChange called");
-    // const updatedUser = { ...user, active: !user.active };
+    const updatedUser = { ...user, active: !user.active };
 
     UserAPI.updateUser(updatedUser)
       .then((response) => {
         console.log("Update successful:", response);
-        toast.success("User setted inactive.");
+        toast.success(
+          `User set ${updatedUser.active ? "active" : "inactive"}.`
+        );
         refreshList();
       })
       .catch((error) => {

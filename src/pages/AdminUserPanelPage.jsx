@@ -42,7 +42,7 @@ export default function AdminUserPanelPage(props){
 
     const refreshList = () =>{
         UserAPI.getAllUsers()
-        .then(data => SetUserItems(data))
+        .then(data => {SetUserItems(data); console.log(data)})
         .catch(error => console.log(error));
     }
 

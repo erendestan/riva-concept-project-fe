@@ -14,7 +14,6 @@ export default function EditUser(props){
 
     const getInfo = () => {
       const claims = TokenManager.getClaims();
-      console.log(claims.roles)
         UserAPI.getUserById(userId)
         .then(data => { setUser({
             id: data.id,
@@ -37,10 +36,10 @@ export default function EditUser(props){
         phoneNumber: '',
         password: '',
         role: '',
-        isActive: true
+        isActive: ''
     });
 
-    const handleAddUser = (e) => {
+    const handleEditUser = (e) => {
         e.preventDefault();
         if(
           user.firstName === '' ||
@@ -130,7 +129,7 @@ export default function EditUser(props){
                 placeholder="Enter user's password"
                 value={user.password}
                 onChange={(e) =>
-                    setUser({ ...employee, password: e.target.value })
+                    setUser({ ...user, password: e.target.value })
                 }
               />
             </div>
@@ -148,12 +147,13 @@ export default function EditUser(props){
                   <option value="CUSTOMER">Customer</option>
                   <option value="WORKER">Worker</option>
                 </select>
-              </div>
+            </div>
 
             <button
               type="button"
               className="btn btn-primary"
-              onClick={handleAddUser}
+              onClick={handleEditUser}
+
             >
               Save
             </button>
