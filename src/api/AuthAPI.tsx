@@ -13,6 +13,8 @@ const AuthAPI = {
 
         const userRole = decodedToken.roles;
 
+        const userId = decodedToken.userId;
+
         TokenManager.setAccessToken(accessToken);
         return { accessToken, userRole };
       }),

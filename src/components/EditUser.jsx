@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import UserAPI from '../api/UserApi';
 import {toast} from 'react-hot-toast';
+import TokenManager from '../api/TokenManager'
 
 export default function EditUser(props){
     const navigate = useNavigate();
@@ -12,9 +13,11 @@ export default function EditUser(props){
     },[props.userId])
 
     const getInfo = () => {
+      const claims = TokenManager.getClaims();
+      console.log(claims.roles)
         UserAPI.getUserById(userId)
         .then(data => { setUser({
-            id: data.firstName,
+            id: data.id,
             firstName: data.firstName,
             lastName: data.lastName,
             email: data.email,
@@ -39,24 +42,23 @@ export default function EditUser(props){
 
     const handleAddUser = (e) => {
         e.preventDefault();
-    }
-
-    if(
-        user.firstName === '' ||
-        user.lastName === '' ||
-        user.email === '' ||
-        user.phoneNumber === '' ||
-        user.password === '' ||
-        user.role === ''
-    ){
-        toast.error("Please fill in all required fields.");
-    } else {
-        UserAPI.updateUser(user)
-        .then(response => {
-            toast.success("Updated Succesful");
-            navigate('/adminuserpanel')
-        })
-        .catch(error => {toast.error("Failed to update user.")})
+        if(
+          user.firstName === '' ||
+          user.lastName === '' ||
+          user.email === '' ||
+          user.phoneNumber === '' ||
+          user.password === '' ||
+          user.role === ''
+      ){
+          toast.error("Please fill in all required fields.");
+      } else {
+          UserAPI.updateUser(user)
+          .then(response => {
+              toast.success("Updated Succesful");
+              navigate('/adminuserpanel')
+          })
+          .catch(error => {toast.error("Failed to update user.")})
+      }
     }
 
     return(

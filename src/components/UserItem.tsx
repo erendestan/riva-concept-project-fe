@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import UserAPI from "../api/UserApi";
+import { toast } from "react-hot-toast";
 
 export default function UserItem(props) {
   const navigate = useNavigate();
@@ -11,14 +12,19 @@ export default function UserItem(props) {
   };
 
   const handleUserActiveChange = () => {
-    const updatedUser = { ...user, active: !user.active };
+    const updatedUser = { ...user, active: false };
+    console.log("handleUserActiveChange called");
+    // const updatedUser = { ...user, active: !user.active };
 
     UserAPI.updateUser(updatedUser)
-      .then((repsose) => {
+      .then((response) => {
+        console.log("Update successful:", response);
+        toast.success("User setted inactive.");
         refreshList();
       })
       .catch((error) => {
-        alert("Update failed");
+        console.error("Update failed:", error);
+        toast.error("Delete failed");
       });
   };
 
@@ -48,9 +54,10 @@ export default function UserItem(props) {
         </button>
         <button
           className="btn btn-danger"
-          style={
-            isActive === false ? { display: "none" } : { display: "block" }
-          }
+          style={isActive ? { display: "block" } : { display: "none" }}
+          // style={
+          //   isActive === false ? { display: "none" } : { display: "block" }
+          // }
           onClick={handleUserActiveChange}
         >
           Delete

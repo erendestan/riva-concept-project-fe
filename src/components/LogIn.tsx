@@ -91,8 +91,9 @@ export default function LogIn(props) {
         if (userRole === "ADMIN") {
           navigate("/adminuserpanel");
         } else {
-          navigate("/");
+          navigate("/userProfile");
         }
+        window.location.reload();
       })
       .catch(() => toast.error("Login failed!"))
       .catch((error) => console.error(error));

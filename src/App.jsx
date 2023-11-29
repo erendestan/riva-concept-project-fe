@@ -8,6 +8,8 @@ import AdminUserPanel from './pages/AdminUserPanelPage';
 import AdminUserPanelPage from './pages/AdminUserPanelPage';
 import AddUserPage from './pages/AddUserPage';
 import { Toaster } from 'react-hot-toast';
+import UserProfilePage from './pages/UserProfilePage';
+import EditUserPage from './pages/EditUserPage';
 
 const App = () => {
   return (
@@ -27,6 +29,8 @@ const App = () => {
         <Route path="/createaccount" element={<CreateAccountPage/>}/>
         <Route path='/adminuserpanel' element={<AdminUserPanelPage/>}/>
         <Route path='/addUser' element={<AddUserPage/>}/>
+        <Route path='/userProfile' element={<UserProfilePage/>}/>
+        <Route path='/editUser/:id' element={<EditUserPage/>}/>
       </Routes>
     </Router>
     </div>
