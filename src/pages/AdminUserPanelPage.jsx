@@ -50,9 +50,9 @@ export default function AdminUserPanelPage(props){
       setFilteredUsers(searchedUsers)
     }
 
-    // if(!isAdmin){
-    //   return null;
-    // }
+    if(!isAdmin){
+      return null;
+    }
 
     return (
       <div className='container'>

@@ -23,7 +23,7 @@ export default function EditUser(props){
             phoneNumber: data.phoneNumber,
             password: data.password,
             role: data.role,
-            isActive: data.isActive
+            active: data.active
         })})
     }
 
@@ -36,7 +36,7 @@ export default function EditUser(props){
         phoneNumber: '',
         password: '',
         role: '',
-        isActive: ''
+        active: ''
     });
 
     const handleEditUser = (e) => {

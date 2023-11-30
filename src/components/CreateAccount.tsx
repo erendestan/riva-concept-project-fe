@@ -38,7 +38,7 @@ function CreateAccount() {
       password: password,
       repeatPassword: repeatPassword,
       role: "CUSTOMER",
-      isActive: true,
+      active: true,
     };
 
     // try {

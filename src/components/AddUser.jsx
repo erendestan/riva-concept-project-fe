@@ -14,7 +14,7 @@ export default function AddUser(props){
         phoneNumber: '',
         password: '',
         role: '',
-        isActive: true
+        active: true
     });
 
     const handleAddUser =(e) =>{

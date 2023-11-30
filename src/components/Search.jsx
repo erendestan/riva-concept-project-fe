@@ -8,6 +8,7 @@ export default function SearchComponent(props){
         // Instead of 'onKeyDown', use 'onChange' for real-time updates
         setSearchQuery(e.target.value);
 
+
         // Split the search query into terms
         const searchTerms = e.target.value.toLowerCase().split(' ');
 
@@ -21,7 +22,6 @@ export default function SearchComponent(props){
             )
         );
 
-        
         if(e.target.value === " "){
             setIsDataReady(false);
         }
