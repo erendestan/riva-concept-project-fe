@@ -7,6 +7,7 @@ import TokenManager from '../api/TokenManager'
 export default function EditUser(props){
     const navigate = useNavigate();
     const {userId} = props;
+    const [isAdmin, setIsAdmin] = useState(false);
 
     useEffect(() => {
         getInfo()
@@ -25,6 +26,9 @@ export default function EditUser(props){
             role: data.role,
             active: data.active
         })})
+              if (claims && claims.roles && claims.roles.includes('ADMIN')) {
+                setIsAdmin(true);
+              }
     }
 
     // Use the found user or default values in the useState hook
@@ -54,7 +58,13 @@ export default function EditUser(props){
           UserAPI.updateUser(user)
           .then(response => {
               toast.success("Updated Succesful");
-              navigate('/adminuserpanel')
+              if(isAdmin){
+                navigate('/adminuserpanel')
+              }
+              else{
+                navigate('/userProfile')
+              }
+              
           })
           .catch(error => {toast.error("Failed to update user.")})
       }
@@ -133,8 +143,8 @@ export default function EditUser(props){
                 }
               />
             </div>
-
-            <div className="form-group mb-3">
+            {isAdmin && (
+              <div className="form-group mb-3">
                 <label htmlFor="role">Select your role:</label>
                 <select
                   className="form-control"
@@ -147,7 +157,22 @@ export default function EditUser(props){
                   <option value="CUSTOMER">Customer</option>
                   <option value="WORKER">Worker</option>
                 </select>
-            </div>
+              </div>
+            )}        
+            {/* <div className="form-group mb-3">
+                <label htmlFor="role">Select your role:</label>
+                <select
+                  className="form-control"
+                  id="role"
+                  value={user.role}
+                  onChange={(e) => setUser({ ...user, role: e.target.value })}
+                >
+                  <option value="">Select...</option>
+                  <option value="ADMIN">Admin</option>
+                  <option value="CUSTOMER">Customer</option>
+                  <option value="WORKER">Worker</option>
+                </select>
+            </div> */}
 
             <button
               type="button"
