@@ -12,6 +12,7 @@ import {
 } from "mdb-react-ui-kit";
 // import { postUser } from "../api/UserApi";
 import UserAPI from "../api/UserApi";
+import { toast } from "react-hot-toast";
 
 function CreateAccount() {
   const [firstName, setFirstName] = useState("");
@@ -47,7 +48,7 @@ function CreateAccount() {
 
       UserAPI.postUser(newUser)
         .then(() => {
-          alert("Account created successfully!");
+          toast.success("Account Created Successfuly!");
           navigate("/login");
         })
         .catch((error) => {

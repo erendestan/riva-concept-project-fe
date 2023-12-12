@@ -50,7 +50,6 @@ export default function UserProfile(props) {
             toast.success("Account deleted!")
         } catch (error) {
           toast.error("Failed to delete your account!")
-          // Handle error if needed
         } finally {
           setShowDeleteModal(false);
         }
@@ -65,11 +64,6 @@ export default function UserProfile(props) {
     }
 
     return(
-        // <div>
-        //     <p>First Name: {userData.firstName}</p>
-        //     <p>Last Name: {userData.lastName}</p>
-        // </div>
-
         <div className="mt-3">
         <table className="table table-striped mt-3">
         <thead className="sticky-top">

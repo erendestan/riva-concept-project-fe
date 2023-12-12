@@ -10,6 +10,7 @@ import AddUserPage from './pages/AddUserPage';
 import { Toaster } from 'react-hot-toast';
 import UserProfilePage from './pages/UserProfilePage';
 import EditUserPage from './pages/EditUserPage';
+import ReservationPage from './pages/ReservationPage';
 
 const App = () => {
   return (
@@ -31,6 +32,7 @@ const App = () => {
         <Route path='/addUser' element={<AddUserPage/>}/>
         <Route path='/userProfile' element={<UserProfilePage/>}/>
         <Route path='/editUser/:id' element={<EditUserPage/>}/>
+        <Route path='/reservationCalendar' element={<ReservationPage/>}/>
       </Routes>
     </Router>
     </div>

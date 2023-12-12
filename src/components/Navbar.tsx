@@ -70,10 +70,30 @@ const links = [
     path: "/",
     text: "Log Out",
   },
+  {
+    id: 10,
+    path: "/userProfile",
+    text: "User Profile",
+  },
+  {
+    id: 11,
+    path: "/adminuserpanel",
+    text: "Admin Panel",
+  },
 ];
 
 const NavbarRiva = () => {
   const isAuthenticated = TokenManager.isAuthenticated();
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [isCustomer, setIsCustomer] = useState(false);
+
+  useEffect(() => {
+    // Check if the user has the ADMIN role
+    const claims = TokenManager.getClaims();
+    if (claims && claims.roles && claims.roles.includes("ADMIN")) {
+      setIsAdmin(true);
+    }
+  }, []);
 
   return (
     <Navbar collapseOnSelect expand="lg" className="fixed-top navbar-scroll">
@@ -106,13 +126,20 @@ const NavbarRiva = () => {
                   </Nav.Link>
                 </Nav>
               )}
-              {link.id === 9 && (
+              {link.id === 10 && (
                 <Nav>
                   <Nav.Link href={link.path}>
-                    {isAuthenticated ? (
-                      <Button variant="primary" onClick={TokenManager.clear}>
-                        {link.text}
-                      </Button>
+                    {(isAuthenticated && isAdmin) || isCustomer ? (
+                      <Button variant="primary">{link.text}</Button>
+                    ) : null}
+                  </Nav.Link>
+                </Nav>
+              )}
+              {link.id === 11 && (
+                <Nav>
+                  <Nav.Link href={link.path}>
+                    {isAuthenticated && isAdmin ? (
+                      <Button variant="primary">{link.text}</Button>
                     ) : null}
                   </Nav.Link>
                 </Nav>
@@ -127,6 +154,17 @@ const NavbarRiva = () => {
                     </Nav.Link>
                   </Nav>
                 )}
+              {link.id === 9 && (
+                <Nav>
+                  <Nav.Link href={link.path}>
+                    {isAuthenticated ? (
+                      <Button variant="danger" onClick={TokenManager.clear}>
+                        {link.text}
+                      </Button>
+                    ) : null}
+                  </Nav.Link>
+                </Nav>
+              )}
             </React.Fragment>
           ))}
         </Navbar.Collapse>
