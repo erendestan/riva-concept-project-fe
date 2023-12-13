@@ -6,6 +6,7 @@ import UserAPI from '../api/UserApi'
 import SearchComponent from '../components/Search'
 import TokenManager from '../api/TokenManager'
 import {toast} from 'react-hot-toast';
+import ReservationCalendar from '../components/ReservationCalendar'
 
 export default function AdminUserPanelPage(props){
     const navigate = useNavigate();
@@ -70,6 +71,7 @@ export default function AdminUserPanelPage(props){
             <button className='btn btn-success' style={isActive === false ? { display: 'none' } : { display: 'block' }} onClick={navigateToAddUserPage}>+ Add User</button>
           </div>
         </div>
+        {/* <ReservationCalendar users={userItems} /> */}
       </div>
     )
 

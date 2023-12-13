@@ -9,9 +9,9 @@ const ReservationAPI = {
       headers: { Authorization: `Bearer ${TokenManager.getAccessToken()}` },
     }),
 
-  getReservation: (reservationId) =>
+  getReservationById: (reservationId) =>
     axios
-      .get(`/reservations${reservationId}`, {
+      .get(`/reservations/${reservationId}`, {
         headers: { Authorization: `Bearer ${TokenManager.getAccessToken()}` },
       })
       .then((response) => response.data),
@@ -24,13 +24,13 @@ const ReservationAPI = {
       .then((response) => response.data.reservations),
 
   updateReservation: (updateReservation) =>
-    axios.put(`/reservations${updateReservation.id}`, updateReservation, {
+    axios.put(`/reservations/${updateReservation.id}`, updateReservation, {
       headers: { Authorization: `Bearer ${TokenManager.getAccessToken()}` },
     }),
 
   deleteReservation: (reservationId) =>
     axios
-      .delete(`/reservations${reservationId}`, {
+      .delete(`/reservations/${reservationId}`, {
         headers: { Authorization: `Bearer ${TokenManager.getAccessToken()}` },
       })
       .then((response) => response.data),

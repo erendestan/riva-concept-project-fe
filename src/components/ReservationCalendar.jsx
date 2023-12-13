@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+// ReservationCalendar.jsx
+import React, { useState, useEffect } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from "@fullcalendar/timegrid"
@@ -6,6 +7,8 @@ import interactionPlugin from "@fullcalendar/interaction"
 import multiMonthPlugin from '@fullcalendar/multimonth'
 import ReservationDetailsForm from "./ReservationDetailsForm";
 import { toast } from "react-hot-toast";
+import UserAPI from '../api/UserApi';
+import ReservationAPI from '../api/ReservationAPI';
 
 const containerStyle = {
   overflowY: 'auto',
@@ -16,15 +19,28 @@ const containerStyle = {
 function ReservationCalendar() {
   const [showEventForm, setShowEventForm] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
+  const [reservations, setReservations] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const reservationsData = await ReservationAPI.getAllReservations();
+        setReservations(reservationsData);
+        // console.log(reservationsData) //--> Debug
+      } catch (error) {
+        console.error('Error fetching reservations data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const handleDateClick = (arg) => {
-    // Handle the date click event
     const clickedDate = arg.date;
     const currentDate = new Date();
     const nextTwoDays = new Date();
     nextTwoDays.setDate(currentDate.getDate() + 2);
 
-    // Check if the selected date is today or in the past
     if (
       clickedDate.getFullYear() === currentDate.getFullYear() &&
       clickedDate.getMonth() === currentDate.getMonth() &&
@@ -41,9 +57,38 @@ function ReservationCalendar() {
   };
 
   const handleEventFormClose = () => {
-    // Close the event form
     setShowEventForm(false);
   };
+
+  // const getUserFullNameWithTime = (reservation) => {
+  //   const user = reservation.user;
+  //   const startTime = reservation.startTime;
+  //   const endTime = reservation.endTime;
+  //   const fullName = user ? `${user.firstName} ${user.lastName}` : 'Unknown User';
+  
+  //   return `${startTime} - ${endTime} ${fullName}`;
+  // };
+
+  const getEventListTitle = (reservation) => {
+    const user = reservation.user;
+    const fullName = user ? `${user.firstName} ${user.lastName}` : 'Unknown User';
+  
+    return `${fullName}`;
+  };
+
+  const eventList = reservations.map((reservation) => ({
+    title: getEventListTitle(reservation),
+    start: reservation.reservationDate,
+    end: reservation.endTime, // Adjust as needed
+    id: reservation.reservationId,
+    user: reservation.user
+  }));
+  
+  const eventContent = ({ event, timeText }) => (
+        <div className='col-12'>
+          {event.title}
+        </div>
+  );
 
   return (
     <div style={containerStyle}>
@@ -56,6 +101,10 @@ function ReservationCalendar() {
           end: "multiMonthYear, dayGridMonth, dayGridWeek"
         }}
         dateClick={(info) => handleDateClick(info)}
+        events={eventList}
+        eventContent={eventContent}
+        dayMaxEventRows={2} // Adjust as needed
+        dayMaxEvents={4}    // Adjust as needed
       />
       {showEventForm && (
         <ReservationDetailsForm
@@ -64,7 +113,7 @@ function ReservationCalendar() {
         />
       )}
     </div>
-  )
+  );
 }
 
 export default ReservationCalendar;
