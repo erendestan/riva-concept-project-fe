@@ -56,8 +56,18 @@ function ReservationCalendar() {
     } else if (clickedDate < nextTwoDays) {
       toast.error('Reservations for the next 2 days are not possible due to preparation times.');
     } else {
-      setSelectedDate(clickedDate);
-      setShowEventForm(true);
+      // Check if there is a reservation on the selected date
+      const isDateTaken = reservations.some(
+        (reservation) =>
+          new Date(reservation.reservationDate).toDateString() === clickedDate.toDateString()
+      );
+
+      if(isDateTaken){
+        toast.error("Selected date is already taken. Please choose another date.")
+      }else{
+        setSelectedDate(clickedDate);
+        setShowEventForm(true); 
+      }
     }
   };
 

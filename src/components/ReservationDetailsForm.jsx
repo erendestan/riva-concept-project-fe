@@ -6,6 +6,7 @@ import CustomModal from './CustomModal';
 import TokenManager from '../api/TokenManager';
 import UserAPI from '../api/UserApi';
 import ReservationAPI from '../api/ReservationAPI';
+import {toast} from 'react-hot-toast';
 
 const ReservationDetailsForm = ({ selectedDate, onClose, onSave, isAddEventButtonClicked}) => {
   const [eventType, setEventType] = useState('WEDDING');
@@ -47,8 +48,6 @@ const getInfo = () => {
 
 const handleSave = async () => {
   try {
-    console.log('selectedFormDate before conversion:', selectedFormDate);
-
     // Convert the selectedFormDate string to a Date object
     const formattedDate = !isAddEventButtonClicked
       ? selectedFormDate
@@ -59,6 +58,9 @@ const handleSave = async () => {
       formattedDate.getTime() - formattedDate.getTimezoneOffset() * 60000
     );
 
+    // Convert adjusted date to ISO string
+    const isoFormattedDate = adjustedDate.toISOString();
+
     const response = await ReservationAPI.addReservation({
       userId: user.id,
       eventType,
@@ -67,8 +69,13 @@ const handleSave = async () => {
       startTime,
       endTime,
     });
+
+    window.location.reload();
+    toast.success('Reservation created successfully');
+
   } catch (error) {
     console.error('Error creating reservation:', error);
+    toast.error('Error creating reservation. Please try again.');
   }
 
   // Close the form
@@ -95,11 +102,6 @@ const handleSave = async () => {
               value={selectedFormDate}
               onChange={(e) => setSelectedFormDate(e.target.value)}
             />
-            {/* <DatePicker
-              selected={selectedFormDate}
-              onChange={(date) => setSelectedFormDate(date)}
-              dateFormat="MM/dd/yyyy"
-            /> */}
           </label>
         )}
         <label>
