@@ -6,9 +6,12 @@ import timeGridPlugin from "@fullcalendar/timegrid"
 import interactionPlugin from "@fullcalendar/interaction"
 import multiMonthPlugin from '@fullcalendar/multimonth'
 import ReservationDetailsForm from "./ReservationDetailsForm";
+import ReservationDetailsModal from './ReservationDetailsModal';
 import { toast } from "react-hot-toast";
 import UserAPI from '../api/UserApi';
 import ReservationAPI from '../api/ReservationAPI';
+import { info } from 'autoprefixer';
+
 
 const containerStyle = {
   overflowY: 'auto',
@@ -20,6 +23,7 @@ function ReservationCalendar() {
   const [showEventForm, setShowEventForm] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const [reservations, setReservations] = useState([]);
+  const [clickedReservationId, setClickedReservationId] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -84,11 +88,20 @@ function ReservationCalendar() {
     user: reservation.user
   }));
   
-  const eventContent = ({ event, timeText }) => (
+  const eventContent = ({ event }) => (
         <div className='col-12'>
           {event.title}
         </div>
   );
+
+  const handleEventClick = (arg) => {
+    const reservationId = arg.event.id;
+    setClickedReservationId(reservationId);
+  };
+
+  const handleReservationModalClose = () => {
+    setClickedReservationId(null);
+  };
 
   return (
     <div style={containerStyle}>
@@ -103,6 +116,7 @@ function ReservationCalendar() {
         dateClick={(info) => handleDateClick(info)}
         events={eventList}
         eventContent={eventContent}
+        eventClick={(info) => handleEventClick(info)}
         dayMaxEventRows={2} // Adjust as needed
         dayMaxEvents={4}    // Adjust as needed
       />
@@ -110,6 +124,12 @@ function ReservationCalendar() {
         <ReservationDetailsForm
           selectedDate={selectedDate}
           onClose={handleEventFormClose}
+        />
+      )}
+      {clickedReservationId && (
+        <ReservationDetailsModal
+          reservationId={clickedReservationId}
+          onClose={handleReservationModalClose}
         />
       )}
     </div>
