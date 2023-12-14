@@ -24,6 +24,7 @@ function ReservationCalendar() {
   const [selectedDate, setSelectedDate] = useState(null);
   const [reservations, setReservations] = useState([]);
   const [clickedReservationId, setClickedReservationId] = useState(null);
+  const [showAddEventModal, setShowAddEventModal] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -103,35 +104,57 @@ function ReservationCalendar() {
     setClickedReservationId(null);
   };
 
+  const handleAddEventButtonClick = () => {
+    setShowAddEventModal(true);
+  };
+
+  const handleAddEventModalClose = () => {
+    setShowAddEventModal(false);
+  };
+
   return (
     <div style={containerStyle}>
-      <FullCalendar
-        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, multiMonthPlugin]}
-        initialView={'multiMonthYear'}
-        headerToolbar={{
-          start: "today prev,next",
-          center: "title",
-          end: "multiMonthYear, dayGridMonth, dayGridWeek"
-        }}
-        dateClick={(info) => handleDateClick(info)}
-        events={eventList}
-        eventContent={eventContent}
-        eventClick={(info) => handleEventClick(info)}
-        dayMaxEventRows={2} // Adjust as needed
-        dayMaxEvents={4}    // Adjust as needed
-      />
-      {showEventForm && (
-        <ReservationDetailsForm
-          selectedDate={selectedDate}
-          onClose={handleEventFormClose}
+      <div className='row'>
+        <button className="col-2 btn btn-success mt-3 mb-1"
+            onClick={handleAddEventButtonClick}>
+            Add Event
+        </button>
+      </div>
+      <div className='row'>
+        <FullCalendar
+          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, multiMonthPlugin]}
+          initialView={'multiMonthYear'}
+          headerToolbar={{
+            start: "today prev,next",
+            center: "title",
+            end: "multiMonthYear dayGridMonth dayGridWeek",
+          }}
+          dateClick={(info) => handleDateClick(info)}
+          events={eventList}
+          eventContent={eventContent}
+          eventClick={(info) => handleEventClick(info)}
         />
-      )}
-      {clickedReservationId && (
-        <ReservationDetailsModal
-          reservationId={clickedReservationId}
-          onClose={handleReservationModalClose}
-        />
-      )}
+        {showEventForm && (
+          <ReservationDetailsForm
+            selectedDate={selectedDate}
+            onClose={handleEventFormClose}
+          />
+        )}
+        {clickedReservationId && (
+          <ReservationDetailsModal
+            reservationId={clickedReservationId}
+            onClose={handleReservationModalClose}
+          />
+        )}
+        {showAddEventModal && (
+          <ReservationDetailsForm
+            selectedDate={selectedDate}
+            onClose={handleAddEventModalClose}
+            // onSave={handleAddEvent}
+            isAddEventButtonClicked={true}
+          />
+        )}
+      </div>
     </div>
   );
 }

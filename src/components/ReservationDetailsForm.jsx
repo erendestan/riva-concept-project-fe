@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
 import { Button } from 'reactstrap';
+import 'react-datepicker/dist/react-datepicker.css';
+import DatePicker from 'react-datepicker';
 import CustomModal from './CustomModal';
 
-const ReservationDetailsForm = ({ selectedDate, onClose }) => {
+const ReservationDetailsForm = ({ selectedDate, onClose, onSave, isAddEventButtonClicked }) => {
   const [eventType, setEventType] = useState('WEDDING');
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
+  const [selectedFormDate, setSelectedFormDate] = useState(
+    isAddEventButtonClicked ? new Date() : selectedDate || new Date()
+  );
 
   const handleSave = () => {
     // Add your logic to save the event details
@@ -31,7 +36,23 @@ const ReservationDetailsForm = ({ selectedDate, onClose }) => {
       onSubmit={handleSave}
     >
       <div>
-        <p>Date: {selectedDate && selectedDate.toLocaleDateString()}</p>
+      {!isAddEventButtonClicked ? (
+          <p>Date: {selectedFormDate && selectedFormDate.toLocaleDateString()}</p>
+        ) : (
+          <label>
+            Select Date:
+            <input
+              type="date"
+              value={selectedFormDate}
+              onChange={(e) => setSelectedFormDate(e.target.value)}
+            />
+            {/* <DatePicker
+              selected={selectedFormDate}
+              onChange={(date) => setSelectedFormDate(date)}
+              dateFormat="MM/dd/yyyy"
+            /> */}
+          </label>
+        )}
         <label>
           Event Type:
           <select value={eventType} onChange={(e) => setEventType(e.target.value)}>
