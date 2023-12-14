@@ -1,30 +1,79 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from 'reactstrap';
 import 'react-datepicker/dist/react-datepicker.css';
 import DatePicker from 'react-datepicker';
 import CustomModal from './CustomModal';
+import TokenManager from '../api/TokenManager';
+import UserAPI from '../api/UserApi';
+import ReservationAPI from '../api/ReservationAPI';
 
-const ReservationDetailsForm = ({ selectedDate, onClose, onSave, isAddEventButtonClicked }) => {
+const ReservationDetailsForm = ({ selectedDate, onClose, onSave, isAddEventButtonClicked}) => {
   const [eventType, setEventType] = useState('WEDDING');
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
   const [selectedFormDate, setSelectedFormDate] = useState(
     isAddEventButtonClicked ? new Date() : selectedDate || new Date()
   );
+  const [user, setUser] = useState({});
+  const [claims, setClaims] = useState({});
 
-  const handleSave = () => {
-    // Add your logic to save the event details
-    // For example, you can send the details to your backend
-    console.log('Event Details:', {
-      date: selectedDate,
+  useEffect(() => {
+    getInfo()
+},[])
+
+const getInfo = () => {
+  const tokenClaims = TokenManager.getClaims();
+  if (tokenClaims) {
+    setClaims(tokenClaims);
+    const { userId } = tokenClaims;
+    UserAPI.getUserById(userId)
+      .then((data) => {
+        setUser({
+          id: data.id,
+          firstName: data.firstName,
+          lastName: data.lastName,
+          email: data.email,
+          phoneNumber: data.phoneNumber,
+          password: data.password,
+          role: data.role,
+          active: data.active,
+        });
+      })
+      .catch((error) => {
+        console.error('Error fetching user details:', error);
+      });
+  }
+};
+
+const handleSave = async () => {
+  try {
+    console.log('selectedFormDate before conversion:', selectedFormDate);
+
+    // Convert the selectedFormDate string to a Date object
+    const formattedDate = !isAddEventButtonClicked
+      ? selectedFormDate
+      : new Date(selectedFormDate);
+
+    // Adjust the date for the timezone offset
+    const adjustedDate = new Date(
+      formattedDate.getTime() - formattedDate.getTimezoneOffset() * 60000
+    );
+
+    const response = await ReservationAPI.addReservation({
+      userId: user.id,
       eventType,
+      reservationCreatedDate: new Date(),
+      reservationDate: isoFormattedDate,
       startTime,
       endTime,
     });
+  } catch (error) {
+    console.error('Error creating reservation:', error);
+  }
 
-    // Close the form
-    onClose();
-  };
+  // Close the form
+  onClose();
+};
 
   return (
     <CustomModal
