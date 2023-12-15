@@ -77,6 +77,11 @@ const links = [
   },
   {
     id: 11,
+    path: "/reservationCalendar",
+    text: "Reservation Calendar",
+  },
+  {
+    id: 12,
     path: "/adminuserpanel",
     text: "Admin Panel",
   },
@@ -88,10 +93,11 @@ const NavbarRiva = () => {
   const [isCustomer, setIsCustomer] = useState(false);
 
   useEffect(() => {
-    // Check if the user has the ADMIN role
+    // Check if the user has the ADMIN or CUSTOMER role
     const claims = TokenManager.getClaims();
-    if (claims && claims.roles && claims.roles.includes("ADMIN")) {
-      setIsAdmin(true);
+    if (claims && claims.roles) {
+      setIsAdmin(claims.roles.includes("ADMIN"));
+      setIsCustomer(claims.roles.includes("CUSTOMER"));
     }
   }, []);
 
@@ -136,6 +142,15 @@ const NavbarRiva = () => {
                 </Nav>
               )}
               {link.id === 11 && (
+                <Nav>
+                  <Nav.Link href={link.path}>
+                    {(isAuthenticated && isAdmin) || isCustomer ? (
+                      <Button variant="primary">{link.text}</Button>
+                    ) : null}
+                  </Nav.Link>
+                </Nav>
+              )}
+              {link.id === 12 && (
                 <Nav>
                   <Nav.Link href={link.path}>
                     {isAuthenticated && isAdmin ? (
