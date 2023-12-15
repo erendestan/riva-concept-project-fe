@@ -19,12 +19,14 @@ const containerStyle = {
   marginBottom: '20px'
 };
 
-function ReservationCalendar() {
+function ReservationCalendar(props) {
   const [showEventForm, setShowEventForm] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const [reservations, setReservations] = useState([]);
   const [clickedReservationId, setClickedReservationId] = useState(null);
   const [showAddEventModal, setShowAddEventModal] = useState(false);
+
+    const {userItems}  = props;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -162,6 +164,7 @@ function ReservationCalendar() {
             onClose={handleAddEventModalClose}
             // onSave={handleAddEvent}
             isAddEventButtonClicked={true}
+            userItems={userItems}
           />
         )}
       </div>

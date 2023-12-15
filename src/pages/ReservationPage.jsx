@@ -4,6 +4,7 @@ import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import UserAPI from '../api/UserApi';
 import TokenManager from '../api/TokenManager';
+import ReservationDetailsForm from '../components/ReservationDetailsForm';
 
 export default function ReservationPage(props) {
   const navigate = useNavigate();
@@ -18,7 +19,6 @@ export default function ReservationPage(props) {
     UserAPI.getAllUsers()
       .then(data => {
         setUserItems(data);
-        console.log(data);
       })
       .catch(error => console.log(error));
   };
@@ -41,7 +41,8 @@ export default function ReservationPage(props) {
   } else {
     return (
       <div className="container">
-        {<ReservationCalendar users={userItems} />}
+        {<ReservationCalendar userItems={userItems} />}
+        {/* {<ReservationDetailsForm userItems={userItems}/>} */}
       </div>
     );
   }

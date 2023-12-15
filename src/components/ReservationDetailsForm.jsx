@@ -8,15 +8,18 @@ import UserAPI from '../api/UserApi';
 import ReservationAPI from '../api/ReservationAPI';
 import {toast} from 'react-hot-toast';
 
-const ReservationDetailsForm = ({ selectedDate, onClose, onSave, isAddEventButtonClicked}) => {
+const ReservationDetailsForm = ({ selectedDate, onClose, onSave, isAddEventButtonClicked, userItems}) => {
   const [eventType, setEventType] = useState('WEDDING');
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
   const [selectedFormDate, setSelectedFormDate] = useState(
     isAddEventButtonClicked ? new Date() : selectedDate || new Date()
   );
+  console.log(userItems, "test")
   const [user, setUser] = useState({});
   const [claims, setClaims] = useState({});
+  // const [selectedUser, setSelectedUser] = useState(null);
+  const [selectedUserId, setSelectedUserId] = useState(null);
 
   useEffect(() => {
     getInfo()
@@ -62,7 +65,9 @@ const handleSave = async () => {
     const isoFormattedDate = adjustedDate.toISOString();
 
     const response = await ReservationAPI.addReservation({
-      userId: user.id,
+      // userId: user.id,
+      // userId: selectedUser ? selectedUser.id : user.id,
+      userId: selectedUserId || user.id,
       eventType,
       reservationCreatedDate: new Date(),
       reservationDate: isoFormattedDate,
@@ -82,50 +87,146 @@ const handleSave = async () => {
   onClose();
 };
 
-  return (
-    <CustomModal
-      isOpen={true} // Set to true to make the modal visible
-      toggle={onClose}
-      title="Create Event"
-      submitText="Save Event"
-      onCancel={onClose}
-      onSubmit={handleSave}
-    >
-      <div>
-      {!isAddEventButtonClicked ? (
-          <p>Date: {selectedFormDate && selectedFormDate.toLocaleDateString()}</p>
-        ) : (
+return (
+  <CustomModal
+    isOpen={true}
+    toggle={onClose}
+    title="Create Event"
+    submitText="Save Event"
+    onCancel={onClose}
+    onSubmit={handleSave}
+  >
+    <div>
+      <label>
+        Select Date:
+        <input
+          type="date"
+          value={selectedFormDate.toISOString().split('T')[0]}
+          onChange={(e) => setSelectedFormDate(new Date(e.target.value))}
+        />
+      </label>
+
+      {claims && claims.roles && claims.roles.includes('ADMIN') && (
           <label>
-            Select Date:
-            <input
-              type="date"
-              value={selectedFormDate}
-              onChange={(e) => setSelectedFormDate(e.target.value)}
-            />
+            Select User:
+            <select
+              value={selectedUserId || ''}
+              onChange={(e) => setSelectedUserId(e.target.value)}
+            >
+              <option value="">Select User</option>
+              {userItems.map((user) => (
+                <option key={user.id} value={user.id}>
+                  {`${user.firstName} ${user.lastName}`}
+                </option>
+              ))}
+            </select>
           </label>
         )}
-        <label>
-          Event Type:
-          <select value={eventType} onChange={(e) => setEventType(e.target.value)}>
-            <option value="WEDDING">Wedding</option>
-            <option value="GRADUATION_CEREMONY">Graduation Ceremony</option>
-            <option value="COCKTAIL_EVENT">Cocktail Event</option>
-            <option value="OTHER">Other</option>
+
+      {/* <label>
+        Select User:
+        {claims && claims.roles && claims.roles.includes('ADMIN') ? (
+          <select
+            value={selectedUserId || ''}
+            onChange={(e) => setSelectedUserId(e.target.value)}
+          >
+            <option value="">Select User</option>
+            {userItems.map((user) => (
+              <option key={user.id} value={user.id}>
+                {`${user.firstName} ${user.lastName}`}
+              </option>
+            ))}
           </select>
-        </label>
-        <br />
-        <label>
-          Start Time:
-          <input type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)}/>
-        </label>
-        <br />
-        <label>
-          End Time:
-          <input type="time" value={endTime} onChange={(e) => setEndTime(e.target.value)}/>
-        </label>
-      </div>
-    </CustomModal>
-  );
+        ) : (
+          <p>{`${user.firstName} ${user.lastName}`}</p>
+        )}
+      </label> */}
+
+      <label>
+        Event Type:
+        <select value={eventType} onChange={(e) => setEventType(e.target.value)}>
+          <option value="WEDDING">Wedding</option>
+          <option value="GRADUATION_CEREMONY">Graduation Ceremony</option>
+          <option value="COCKTAIL_EVENT">Cocktail Event</option>
+          <option value="OTHER">Other</option>
+        </select>
+      </label>
+      <br />
+      <label>
+        Start Time:
+        <input type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)} />
+      </label>
+      <br />
+      <label>
+        End Time:
+        <input type="time" value={endTime} onChange={(e) => setEndTime(e.target.value)} />
+      </label>
+    </div>
+  </CustomModal>
+);
+
+// return (
+//   <CustomModal
+//     isOpen={true}
+//     toggle={onClose}
+//     title="Create Event"
+//     submitText="Save Event"
+//     onCancel={onClose}
+//     onSubmit={handleSave}
+//   >
+//     <div>
+//       {!isAddEventButtonClicked ? (
+//         <p>Date: {selectedFormDate && selectedFormDate.toLocaleDateString()}</p>
+//       ) : (
+//         <>
+//           <label>
+//             Select User:
+//             {claims && claims.roles && claims.roles.includes('ADMIN') ? (
+//               <select
+//                 value={selectedUser ? selectedUser.id : ''}
+//                 onChange={(e) => {
+//                   const selectedUserId = e.target.value;
+//                   const selectedUser = userItems.find((user) => user.id === selectedUserId);
+//                   setSelectedUser(selectedUser);
+//                 }}
+//               >
+//                 <option value="">Select User</option>
+//                 {userItems.map((user) => (
+//                   <option key={user.id} value={user.id}>
+//                     {`${user.firstName} ${user.lastName}`}
+//                   </option>
+//                 ))}
+//               </select>
+//             ) : (
+//               <p>{`${user.firstName} ${user.lastName}`}</p>
+//             )}
+//           </label>
+//         </>
+//       )}
+
+//       <label>
+//         Event Type:
+//         <select value={eventType} onChange={(e) => setEventType(e.target.value)}>
+//           <option value="WEDDING">Wedding</option>
+//           <option value="GRADUATION_CEREMONY">Graduation Ceremony</option>
+//           <option value="COCKTAIL_EVENT">Cocktail Event</option>
+//           <option value="OTHER">Other</option>
+//         </select>
+//       </label>
+//       <br />
+//       <label>
+//         Start Time:
+//         <input type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)} />
+//       </label>
+//       <br />
+//       <label>
+//         End Time:
+//         <input type="time" value={endTime} onChange={(e) => setEndTime(e.target.value)} />
+//       </label>
+//     </div>
+//   </CustomModal>
+// );
+
 };
 
 export default ReservationDetailsForm;
