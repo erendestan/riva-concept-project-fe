@@ -1,41 +1,48 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import ReservationCalendar from "../components/ReservationCalendar";
-import {toast} from 'react-hot-toast';
-import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 import UserAPI from '../api/UserApi';
+import TokenManager from '../api/TokenManager';
 
-export default function ReservationPage(props){
+export default function ReservationPage(props) {
   const navigate = useNavigate();
-  const [isDataReady, setIsDataReady] = useState(false);
-  const[userItems, SetUserItems] = useState([]);
-  const [doesHaveRole, setHasRole] = useState(false);
+  const [userItems, setUserItems] = useState([]);
+  const [isWorker, setIsWorker] = useState(false);
 
   const navigateToMainPage = () => {
-    navigate("/")
+    navigate("/");
   };
 
-  const refreshList = () =>{
+  const refreshList = () => {
     UserAPI.getAllUsers()
-    .then(data => {SetUserItems(data); console.log(data)})
-    .catch(error => console.log(error));
+      .then(data => {
+        setUserItems(data);
+        console.log(data);
+      })
+      .catch(error => console.log(error));
+  };
 
-    useEffect(() => {
-      // Check if the user has the ADMIN role
-      const claims = TokenManager.getClaims();
-      if (claims && claims.roles && claims.roles.includes('ADMIN') || ('CUSTOMER')) {
-        setHasRole(true);
-        refreshList();
-      }else {
-        toast.error('Access Denied!');
-        navigateToMainPage();
-      }
-      
-    }, [navigate]);
-}
+  useEffect(() => {
+    // Check if the user has the WORKER role
+    const claims = TokenManager.getClaims();
+    if (claims && claims.roles && claims.roles.includes('WORKER')) {
+      setIsWorker(true);
+      toast.error('Access Denied!');
+      navigateToMainPage();
+    } else {
+      // If the user is not a worker, refresh the list
+      refreshList();
+    }
+  }, [navigate]); // Dependency array should include dependencies for useEffect
 
+  if (isWorker) {
+    return null;
+  } else {
     return (
-        <div className="container">
-          {<ReservationCalendar users={userItems}/>}
-        </div>
-      );
+      <div className="container">
+        {<ReservationCalendar users={userItems} />}
+      </div>
+    );
+  }
 }
