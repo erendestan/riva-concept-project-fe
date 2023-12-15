@@ -150,6 +150,7 @@ function ReservationCalendar(props) {
           <ReservationDetailsForm
             selectedDate={selectedDate}
             onClose={handleEventFormClose}
+            userItems={userItems}
           />
         )}
         {clickedReservationId && (
