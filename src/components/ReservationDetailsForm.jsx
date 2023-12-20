@@ -134,7 +134,8 @@ return (
               <option value="">Select User</option>
               {filteredUsers.map((user) => (
                 <option key={user.id} value={user.id}>
-                  {`${user.firstName} ${user.lastName} (${user.email}, ${user.phoneNumber})`}
+                  {`${user.firstName} ${user.lastName}`}
+                  {/* {`${user.firstName} ${user.lastName} (${user.email}, ${user.phoneNumber})`} */}
                 </option>
               ))}
             </select>
