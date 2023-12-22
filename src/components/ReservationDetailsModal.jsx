@@ -95,6 +95,7 @@ const ReservationDetailsModal = ({ reservationId, onClose }) => {
       await ReservationAPI.updateReservation(updatedReservation);
   
       // Handle success (e.g., show a success message, close the modal)
+      window.location.reload();
       toast.success('Reservation updated successfully');
       
       // Perform any additional actions, e.g., closing the modal
@@ -104,6 +105,32 @@ const ReservationDetailsModal = ({ reservationId, onClose }) => {
       console.error('Error updating reservation:', error);
       // Handle error (e.g., show an error message)
       toast.error('Error updating reservation');
+    }
+  };
+
+  const handleDeleteClick = async () => {
+    try {
+      // Check if the user is an admin or the reservation owner
+      const canDelete =
+        userIsAdmin || (userIsReservationOwner && !isEditing);
+
+      if (canDelete) {
+        // Call the delete API function
+        await ReservationAPI.deleteReservation(reservationId);
+
+        // Handle success (e.g., show a success message, close the modal)
+        window.location.reload();
+        toast.success('Reservation deleted successfully');
+
+        // Perform any additional actions, e.g., closing the modal
+        onClose();
+      } else {
+        toast.error('You do not have permission to delete this reservation');
+      }
+    } catch (error) {
+      console.error('Error deleting reservation:', error);
+      // Handle error (e.g., show an error message)
+      toast.error('Error deleting reservation');
     }
   };
 
@@ -194,7 +221,10 @@ return (
         )}
 
         {!isEditing && (userIsAdmin || userIsReservationOwner) && (
-          <button onClick={handleEditClick}>Edit</button>
+          <>
+            <button onClick={handleEditClick}>Edit</button>
+            <button onClick={handleDeleteClick}>Delete</button>
+          </>
         )}
 
         {isEditing && (
