@@ -15,21 +15,36 @@ export default function EditUser(props){
 
     const getInfo = () => {
       const claims = TokenManager.getClaims();
+    
+      if (claims && claims.roles && claims.roles.includes('ADMIN')) {
+        setIsAdmin(true);
+      }
+    
+      if (claims && (claims.userId == userId || claims.roles.includes('ADMIN'))) {
         UserAPI.getUserById(userId)
-        .then(data => { setUser({
-            id: data.id,
-            firstName: data.firstName,
-            lastName: data.lastName,
-            email: data.email,
-            phoneNumber: data.phoneNumber,
-            password: data.password,
-            role: data.role,
-            active: data.active
-        })})
-              if (claims && claims.roles && claims.roles.includes('ADMIN')) {
-                setIsAdmin(true);
-              }
-    }
+          .then(data => {
+            setUser({
+              id: data.id,
+              firstName: data.firstName,
+              lastName: data.lastName,
+              email: data.email,
+              phoneNumber: data.phoneNumber,
+              password: data.password,
+              role: data.role,
+              active: data.active
+            });
+          })
+          .catch(error => {
+            // Handle error (e.g., show toast message)
+            toast.error("Failed to fetch user details.");
+          });
+      } else {
+        // User is trying to edit someone else's details without proper authorization
+        toast.error("Access Denied: You are not authorized to edit this user.");
+        // Redirect to own edit page
+        navigate(`/editUser/${claims.userId}`);
+      }
+    };
 
     // Use the found user or default values in the useState hook
     const [user, setUser] = useState({
@@ -159,21 +174,6 @@ export default function EditUser(props){
                 </select>
               </div>
             )}        
-            {/* <div className="form-group mb-3">
-                <label htmlFor="role">Select your role:</label>
-                <select
-                  className="form-control"
-                  id="role"
-                  value={user.role}
-                  onChange={(e) => setUser({ ...user, role: e.target.value })}
-                >
-                  <option value="">Select...</option>
-                  <option value="ADMIN">Admin</option>
-                  <option value="CUSTOMER">Customer</option>
-                  <option value="WORKER">Worker</option>
-                </select>
-            </div> */}
-
             <button
               type="button"
               className="btn btn-primary"
