@@ -398,7 +398,7 @@ var stompClient = null;
 const ChatRoom = () => {
   const [privateChats, setPrivateChats] = useState(new Map());
   const [publicChats, setPublicChats] = useState([]);
-  const [adminChats, setAdminChats] = useState([]); //new added
+  const [adminChats, setAdminChats] = useState(); //new added
   const [userData, setUserData] = useState({
     email: '',
     connected: false,
@@ -429,6 +429,7 @@ const ChatRoom = () => {
     stompClient.subscribe('/user/' + userData.email + '/private', onPrivateMessageReceived);
     
     stompClient.subscribe('/chatroom/admin', onAdminMessageReceived); //new added
+    stompClient.subscribe('/chatroom/admin', onPrivateMessageReceived)
     userJoin();
   };
 
@@ -465,8 +466,28 @@ const ChatRoom = () => {
     }
   };
 
-  const onPrivateMessageReceived = (payload) => {
-    let payloadData = JSON.parse(payload.body);
+  // const onPrivateMessageReceived = (payload) => {
+  //   let payloadData = JSON.parse(payload.body);
+  //   if (privateChats.get(payloadData.senderName)) {
+  //     privateChats.get(payloadData.senderName).push(payloadData);
+  //     setPrivateChats(new Map(privateChats));
+  //   } else {
+  //     let list = [];
+  //     list.push(payloadData);
+
+  //     privateChats.set(payloadData.senderName, list);
+  //     setPrivateChats(new Map(privateChats));
+  //   }
+  // };
+
+ 
+// Update the onPrivateMessageReceived function
+const onPrivateMessageReceived = (payload) => {
+  let payloadData = JSON.parse(payload.body);
+
+  if (payloadData.senderName === 'designdocument@gmail.com') {
+    setAdminChats((prevChats) => [...prevChats, payloadData]);
+  } else {
     if (privateChats.get(payloadData.senderName)) {
       privateChats.get(payloadData.senderName).push(payloadData);
       setPrivateChats(new Map(privateChats));
@@ -477,14 +498,17 @@ const ChatRoom = () => {
       privateChats.set(payloadData.senderName, list);
       setPrivateChats(new Map(privateChats));
     }
-  };
+  }
+};
 
   const sendPrivateValue = () => {
     if (stompClient) {
       const receiverEmail = 'designdocument@gmail.com'; // Hardcoded receiver email
+      const selectedUser = tab;
+      
       let chatMessage = {
         senderName: userData.email,
-        receiverName: receiverEmail,
+        receiverName: selectedUser,
         message: userData.message,
         status: 'MESSAGE',
       };
@@ -495,6 +519,7 @@ const ChatRoom = () => {
       }
 
       stompClient.send('/app/private-message', {}, JSON.stringify(chatMessage));
+      console.log("Kullaniciya mesaj")
       setUserData({ ...userData, message: '' });
     }
   };
@@ -538,106 +563,210 @@ const ChatRoom = () => {
     }
   };
 
-  const sendAdminValue = () => { //New added
-    if (stompClient) {
-      const adminEmail = 'designdocument@gmail.com';
-      let chatMessage = {
-        senderName: userData.email,
-        receiverName: adminEmail,
-        message: userData.message,
-        status: 'MESSAGE',
-      };
-  
-      if (userData.email !== adminEmail) {
-        setAdminChats([...adminChats, chatMessage]);
-      }
-  
-      stompClient.send('/app/private-message', {}, JSON.stringify(chatMessage));
-      setUserData({ ...userData, message: '' });
-    }
-  };
+// // Modify the sendAdminValue function
+// const sendAdminValue = () => {
+//   if (stompClient) {
+//     const adminEmail = 'designdocument@gmail.com';
+//     let chatMessage = {
+//       senderName: userData.email,
+//       receiverName: adminEmail, // Set the receiver directly to admin's email
+//       message: userData.message,
+//       status: 'MESSAGE',
+//     };
 
-  return (
-    <div style={containerStyle} className="container">
-      {userData.connected ? (
-        <div className="chat-box">
-          <div className="user-info">
-            <p>Your Email: {userData.email}</p>
-          </div>
-          <div className="member-list">
-            <ul>
-              <li onClick={() => setTab('CHATROOM')} className={`member ${tab === 'CHATROOM' && 'active'}`}>
-                Chatroom
+//     setAdminChats((prevChats) => [...prevChats, chatMessage]);
+
+//     stompClient.send('/app/private-message', {}, JSON.stringify(chatMessage));
+//     console.log("Admine mesaj")
+//     setUserData({ ...userData, message: '' });
+//   }
+// };
+
+const sendAdminValue = () => {
+  if (stompClient) {
+    const adminEmail = 'designdocument@gmail.com';
+    let chatMessage = {
+      senderName: userData.email,
+      receiverName: adminEmail,
+      message: userData.message,
+      status: 'MESSAGE',
+    };
+
+    setAdminChats((prevChats) => {
+      const newChats = prevChats ? [...prevChats, chatMessage] : [chatMessage];
+      return newChats;
+    });
+
+    stompClient.send('/app/private-message', {}, JSON.stringify(chatMessage));
+    console.log("Admine mesaj");
+    setUserData({ ...userData, message: '' });
+  }
+};
+
+return (
+  <div style={containerStyle} className="container">
+    {userData.connected ? (
+      <div className="chat-box">
+        <div className="user-info">
+          <p>Your Email: {userData.email}</p>
+        </div>
+        <div className="member-list">
+          <ul>
+            <li onClick={() => setTab('CHATROOM')} className={`member ${tab === 'CHATROOM' && 'active'}`}>
+              Chatroom
+            </li>
+            {userData.email === 'designdocument@gmail.com' ? null : (
+              <li onClick={() => setTab('ADMIN')} className={`member ${tab === 'ADMIN' && 'active'}`}>
+                Admin
               </li>
-              {userData.email === 'designdocument@gmail.com' ? null : (
-                <li onClick={() => setTab('ADMIN')} className={`member ${tab === 'ADMIN' && 'active'}`}>
-                  Admin
+            )}
+            {[...privateChats.keys()]
+              .filter(name => name !== userData.email)
+              .map((name, index) => (
+                <li
+                  onClick={() => setTab(name)}
+                  className={`member ${tab === name && 'active'}`}
+                  key={index}
+                >
+                  {name}
                 </li>
-              )}
-              {[...privateChats.keys()]
-                .filter(name => name !== userData.email) // Exclude the current user's email
-                .map((name, index) => (
-                  <li
-                    onClick={() => setTab(name)}
-                    className={`member ${tab === name && 'active'}`}
-                    key={index}
-                  >
-                    {name}
-                  </li>
-                ))}
+              ))}
+          </ul>
+        </div>
+
+        <div className="chat-content">
+          {tab === 'ADMIN' ? (
+            <ul className="chat-messages">
+              {Array.isArray(adminChats) && adminChats.map((chat, index) => (
+                <li className={`message ${chat.senderName === userData.email && 'self'}`} key={index}>
+                  {chat.senderName !== userData.email && <div className="avatar">{chat.senderName}</div>}
+                  <div className="message-data">{chat.message}</div>
+                  {chat.senderName === userData.email && <div className="avatar self">{chat.senderName}</div>}
+                </li>
+              ))}
             </ul>
-          </div>
-  
-          <div className="chat-content">
-            {tab === 'ADMIN' ? (
-              <ul className="chat-messages">
-                {adminChats.map((chat, index) => (
+          ) : (
+            <ul className="chat-messages">
+              {Array.isArray(privateChats.get(tab)) &&
+                privateChats.get(tab).map((chat, index) => (
                   <li className={`message ${chat.senderName === userData.email && 'self'}`} key={index}>
                     {chat.senderName !== userData.email && <div className="avatar">{chat.senderName}</div>}
                     <div className="message-data">{chat.message}</div>
                     {chat.senderName === userData.email && <div className="avatar self">{chat.senderName}</div>}
                   </li>
                 ))}
-              </ul>
-            ) : (
-              <ul className="chat-messages">
-                {Array.isArray(privateChats.get(tab)) &&
-                  privateChats.get(tab).map((chat, index) => (
-                    <li className={`message ${chat.senderName === userData.email && 'self'}`} key={index}>
-                      {chat.senderName !== userData.email && <div className="avatar">{chat.senderName}</div>}
-                      <div className="message-data">{chat.message}</div>
-                      {chat.senderName === userData.email && <div className="avatar self">{chat.senderName}</div>}
-                    </li>
-                  ))}
-              </ul>
-            )}
-            <div className="send-message">
-              <input
-                type="text"
-                className="input-message"
-                placeholder="enter the message"
-                value={userData.message}
-                onChange={handleMessage}
-              />
-              <button
-                type="button"
-                className="send-button"
-                onClick={tab === 'ADMIN' ? sendAdminValue : sendPrivateValue}
-              >
-                Send
-              </button>
-            </div>
+            </ul>
+          )}
+          <div className="send-message">
+            <input
+              type="text"
+              className="input-message"
+              placeholder="enter the message"
+              value={userData.message}
+              onChange={handleMessage}
+            />
+            <button
+              type="button"
+              className="send-button"
+              onClick={tab === 'ADMIN' ? sendAdminValue : sendPrivateValue}
+            >
+              Send
+            </button>
           </div>
         </div>
-      ) : (
-        <div className="register">
-          <button type="button" onClick={registerUser}>
-            Connect
-          </button>
-        </div>
-      )}
-    </div>
-  );
+      </div>
+    ) : (
+      <div className="register">
+        <button type="button" onClick={registerUser}>
+          Connect
+        </button>
+      </div>
+    )}
+  </div>
+);
+
+  // return (
+  //   <div style={containerStyle} className="container">
+  //     {userData.connected ? (
+  //       <div className="chat-box">
+  //         <div className="user-info">
+  //           <p>Your Email: {userData.email}</p>
+  //         </div>
+  //         <div className="member-list">
+  //           <ul>
+  //             <li onClick={() => setTab('CHATROOM')} className={`member ${tab === 'CHATROOM' && 'active'}`}>
+  //               Chatroom
+  //             </li>
+  //             {userData.email === 'designdocument@gmail.com' ? null : (
+  //               <li onClick={() => setTab('ADMIN')} className={`member ${tab === 'ADMIN' && 'active'}`}>
+  //                 Admin
+  //               </li>
+  //             )}
+  //             {[...privateChats.keys()]
+  //               .filter(name => name !== userData.email) // Exclude the current user's email
+  //               .map((name, index) => (
+  //                 <li
+  //                   onClick={() => setTab(name)}
+  //                   className={`member ${tab === name && 'active'}`}
+  //                   key={index}
+  //                 >
+  //                   {name}
+  //                 </li>
+  //               ))}
+  //           </ul>
+  //         </div>
+  
+  //         <div className="chat-content">
+  //           {tab === 'ADMIN' ? (
+  //             <ul className="chat-messages">
+  //               {adminChats.map((chat, index) => (
+  //                 <li className={`message ${chat.senderName === userData.email && 'self'}`} key={index}>
+  //                   {chat.senderName !== userData.email && <div className="avatar">{chat.senderName}</div>}
+  //                   <div className="message-data">{chat.message}</div>
+  //                   {chat.senderName === userData.email && <div className="avatar self">{chat.senderName}</div>}
+  //                 </li>
+  //               ))}
+  //             </ul>
+  //           ) : (
+  //             <ul className="chat-messages">
+  //               {Array.isArray(privateChats.get(tab)) &&
+  //                 privateChats.get(tab).map((chat, index) => (
+  //                   <li className={`message ${chat.senderName === userData.email && 'self'}`} key={index}>
+  //                     {chat.senderName !== userData.email && <div className="avatar">{chat.senderName}</div>}
+  //                     <div className="message-data">{chat.message}</div>
+  //                     {chat.senderName === userData.email && <div className="avatar self">{chat.senderName}</div>}
+  //                   </li>
+  //                 ))}
+  //             </ul>
+  //           )}
+  //           <div className="send-message">
+  //             <input
+  //               type="text"
+  //               className="input-message"
+  //               placeholder="enter the message"
+  //               value={userData.message}
+  //               onChange={handleMessage}
+  //             />
+  //             <button
+  //               type="button"
+  //               className="send-button"
+  //               onClick={tab === 'ADMIN' ? sendAdminValue : sendPrivateValue}
+  //               // onClick={tab === 'ADMIN' ? sendAdminValue : sendPrivateValue
+  //             >
+  //               Send
+  //             </button>
+  //           </div>
+  //         </div>
+  //       </div>
+  //     ) : (
+  //       <div className="register">
+  //         <button type="button" onClick={registerUser}>
+  //           Connect
+  //         </button>
+  //       </div>
+  //     )}
+  //   </div>
+  // );
 }
 
 export default ChatRoom;
