@@ -222,13 +222,13 @@ return (
 
         {!isEditing && (userIsAdmin || userIsReservationOwner) && (
           <>
-            <button onClick={handleEditClick}>Edit</button>
-            <button onClick={handleDeleteClick}>Delete</button>
+            <button className="btn btn-success" onClick={handleEditClick}>Edit</button>
+            <button className="btn btn-danger ml-2" onClick={handleDeleteClick}>Delete</button>
           </>
         )}
 
         {isEditing && (
-          <button onClick={handleSaveClick}>Save</button>
+          <button className="btn btn-success" onClick={handleSaveClick}>Save</button>
         )}
       </div>
     )}
