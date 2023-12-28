@@ -569,33 +569,48 @@ const ChatRoom = () => {
               <li onClick={() => setTab('CHATROOM')} className={`member ${tab === 'CHATROOM' && 'active'}`}>
                 Chatroom
               </li>
-              {/* New added */}
-              <li onClick={() => setTab('ADMIN')} className={`member ${tab === 'ADMIN' && 'active'}`}>
-                Admin
-              </li> 
-              {[...privateChats.keys()].map((name, index) => (
-                <li
-                  onClick={() => setTab(name)}
-                  className={`member ${tab === name && 'active'}`}
-                  key={index}
-                >
-                  {name}
+              {userData.email === 'designdocument@gmail.com' ? null : (
+                <li onClick={() => setTab('ADMIN')} className={`member ${tab === 'ADMIN' && 'active'}`}>
+                  Admin
                 </li>
-              ))}
+              )}
+              {[...privateChats.keys()]
+                .filter(name => name !== userData.email) // Exclude the current user's email
+                .map((name, index) => (
+                  <li
+                    onClick={() => setTab(name)}
+                    className={`member ${tab === name && 'active'}`}
+                    key={index}
+                  >
+                    {name}
+                  </li>
+                ))}
             </ul>
           </div>
-          {/* New added */}
-          {tab === 'ADMIN' && (
+  
           <div className="chat-content">
-            <ul className="chat-messages">
-              {adminChats.map((chat, index) => (
-                <li className={`message ${chat.senderName === userData.email && 'self'}`} key={index}>
-                  {chat.senderName !== userData.email && <div className="avatar">{chat.senderName}</div>}
-                  <div className="message-data">{chat.message}</div>
-                  {chat.senderName === userData.email && <div className="avatar self">{chat.senderName}</div>}
-                </li>
-              ))}
-            </ul>
+            {tab === 'ADMIN' ? (
+              <ul className="chat-messages">
+                {adminChats.map((chat, index) => (
+                  <li className={`message ${chat.senderName === userData.email && 'self'}`} key={index}>
+                    {chat.senderName !== userData.email && <div className="avatar">{chat.senderName}</div>}
+                    <div className="message-data">{chat.message}</div>
+                    {chat.senderName === userData.email && <div className="avatar self">{chat.senderName}</div>}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <ul className="chat-messages">
+                {Array.isArray(privateChats.get(tab)) &&
+                  privateChats.get(tab).map((chat, index) => (
+                    <li className={`message ${chat.senderName === userData.email && 'self'}`} key={index}>
+                      {chat.senderName !== userData.email && <div className="avatar">{chat.senderName}</div>}
+                      <div className="message-data">{chat.message}</div>
+                      {chat.senderName === userData.email && <div className="avatar self">{chat.senderName}</div>}
+                    </li>
+                  ))}
+              </ul>
+            )}
             <div className="send-message">
               <input
                 type="text"
@@ -604,63 +619,15 @@ const ChatRoom = () => {
                 value={userData.message}
                 onChange={handleMessage}
               />
-              <button type="button" className="send-button" onClick={sendAdminValue}>
+              <button
+                type="button"
+                className="send-button"
+                onClick={tab === 'ADMIN' ? sendAdminValue : sendPrivateValue}
+              >
                 Send
               </button>
             </div>
           </div>
-        )}
-          
-          {tab === 'CHATROOM' && (
-            <div className="chat-content">
-              <ul className="chat-messages">
-                {publicChats.map((chat, index) => (
-                  <li className={`message ${chat.senderName === userData.email && 'self'}`} key={index}>
-                    {chat.senderName !== userData.email && <div className="avatar">{chat.senderName}</div>}
-                    <div className="message-data">{chat.message}</div>
-                    {chat.senderName === userData.email && <div className="avatar self">{chat.senderName}</div>}
-                  </li>
-                ))}
-              </ul>
-              <div className="send-message">
-                <input
-                  type="text"
-                  className="input-message"
-                  placeholder="enter the message"
-                  value={userData.message}
-                  onChange={handleMessage}
-                />
-                <button type="button" className="send-button" onClick={sendValue}>
-                  Send
-                </button>
-              </div>
-            </div>
-          )}
-          {tab !== 'CHATROOM' && (
-        <div className="chat-content">
-          <ul className="chat-messages">
-            {Array.isArray(privateChats.get(tab)) && privateChats.get(tab).map((chat, index) => (
-              <li className={`message ${chat.senderName === userData.email && 'self'}`} key={index}>
-                {chat.senderName !== userData.email && <div className="avatar">{chat.senderName}</div>}
-                <div className="message-data">{chat.message}</div>
-                {chat.senderName === userData.email && <div className="avatar self">{chat.senderName}</div>}
-              </li>
-            ))}
-          </ul>
-          <div className="send-message">
-            <input
-              type="text"
-              className="input-message"
-              placeholder="enter the message"
-              value={userData.message}
-              onChange={handleMessage}
-            />
-            <button type="button" className="send-button" onClick={sendPrivateValue}>
-              Send
-            </button>
-          </div>
-        </div>
-      )}
         </div>
       ) : (
         <div className="register">
@@ -671,7 +638,7 @@ const ChatRoom = () => {
       )}
     </div>
   );
-};
+}
 
 export default ChatRoom;
 
