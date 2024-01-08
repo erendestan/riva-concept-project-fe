@@ -51,11 +51,17 @@ function ReservationCalendar(props) {
       try {
         console.log('Calling API...');
         console.log('ReservationAPI:', ReservationAPI);
+
+        // Convert startDateFilter and endDateFilter to ISOString if not null
+        const formattedStartDate = startDateFilter ? new Date(startDateFilter).toISOString() : null;
+        const formattedEndDate = endDateFilter ? new Date(endDateFilter).toISOString() : null;
   
         const filteredReservationsData = await ReservationAPI.getFilteredReservations(
           eventTypeFilter,
-          startDateFilter,
-          endDateFilter
+          formattedStartDate,
+          formattedEndDate
+          // startDateFilter,
+          // endDateFilter
         );
           
         setReservations(filteredReservationsData);
