@@ -26,21 +26,47 @@ function ReservationCalendar(props) {
   const [clickedReservationId, setClickedReservationId] = useState(null);
   const [showAddEventModal, setShowAddEventModal] = useState(false);
 
+  const [eventTypeFilter, setEventTypeFilter] = useState(null);
+  const [startDateFilter, setStartDateFilter] = useState(null);
+  const [endDateFilter, setEndDateFilter] = useState(null);
+
     const {userItems}  = props;
 
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const reservationsData = await ReservationAPI.getAllReservations();
+  //       setReservations(reservationsData);
+  //       // console.log(reservationsData) //--> Debug
+  //     } catch (error) {
+  //       console.error('Error fetching reservations data:', error);
+  //     }
+      
+  //   };
+
+  //   fetchData();
+  // }, []);
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const reservationsData = await ReservationAPI.getAllReservations();
-        setReservations(reservationsData);
-        // console.log(reservationsData) //--> Debug
+        console.log('Calling API...');
+        console.log('ReservationAPI:', ReservationAPI);
+  
+        const filteredReservationsData = await ReservationAPI.getFilteredReservations(
+          eventTypeFilter,
+          startDateFilter,
+          endDateFilter
+        );
+          
+        setReservations(filteredReservationsData);
+
       } catch (error) {
-        console.error('Error fetching reservations data:', error);
+        console.error('Error fetching filtered reservations data:', error);
       }
     };
-
+  
     fetchData();
-  }, []);
+  }, [eventTypeFilter, startDateFilter, endDateFilter]);
 
   const handleDateClick = (arg) => {
     const clickedDate = arg.date;
@@ -124,12 +150,77 @@ function ReservationCalendar(props) {
     setShowAddEventModal(false);
   };
 
+  const fetchReservationsData = async (filters) => {
+    try {
+      // Fetch filtered reservations based on selected filters
+      // const filteredReservationsData = await ReservationAPI.getFilteredReservations(filters);
+      const filteredReservationsData = await ReservationAPI.getFilteredReservations(
+        filters.eventType,
+        filters.startDate,
+        filters.endDate
+      );
+  
+  
+      setReservations(filteredReservationsData);
+    } catch (error) {
+      console.error('Error fetching filtered reservations data:', error);
+    }
+  };
+
+  const handleFilterChange = () => {
+    // Implement the logic for applying filters
+    // You can use setEventTypeFilter, setStartDateFilter, and setEndDateFilter here
+    // For example, you can make an API call to fetch filtered reservations
+    // and update the state with the new data.
+    fetchReservationsData({
+      eventType: eventTypeFilter,
+      startDate: startDateFilter,
+      endDate: endDateFilter,
+    });
+  };
+
+  const handleReset = () => {
+    // Implement the logic for resetting filters
+    // You can reset eventTypeFilter, startDateFilter, and endDateFilter here
+    setEventTypeFilter(null);
+    setStartDateFilter(null);
+    setEndDateFilter(null);
+    // You may want to refetch the data without filters or apply a default set of filters.
+    fetchReservationsData({});
+  };
+
   return (
     <div style={containerStyle}>
       <div className='row'>
         <button className="col-2 btn btn-success mt-3 mb-1"
             onClick={handleAddEventButtonClick}>
             Add Event
+        </button>
+      </div>
+      {/* Filter Controls */}
+      <div className="row">
+        <label className="col-3">
+          Event Type:
+          <select value={eventTypeFilter} onChange={(e) => setEventTypeFilter(e.target.value)}>
+            <option value="WEDDING">Wedding</option>
+            <option value="GRADUATION_CEREMONY">Graduation Ceremony</option>
+            <option value="COCKTAIL_EVENT">Cocktail Event</option>
+            <option value="OTHER">Other</option>
+        </select>
+        </label>
+        <label className="col-3">
+          Start Date:
+          <input type="date" value={startDateFilter} onChange={(e) => setStartDateFilter(e.target.value)} />
+        </label>
+        <label className="col-3">
+          End Date:
+          <input type="date" value={endDateFilter} onChange={(e) => setEndDateFilter(e.target.value)} />
+        </label>
+        {/* <button className="col-2 btn btn-primary mt-3 mb-1" onClick={handleFilterChange}>
+          Apply Filters
+        </button> */}
+        <button className="col-3 btn btn-secondary mt-3 mb-1" onClick={handleReset}>
+          Reset Filters
         </button>
       </div>
       <div className='row'>

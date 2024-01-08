@@ -34,6 +34,18 @@ const ReservationAPI = {
         headers: { Authorization: `Bearer ${TokenManager.getAccessToken()}` },
       })
       .then((response) => response.data),
+
+  getFilteredReservations: (eventType, startDate, endDate) =>
+    axios
+      .get(`/reservations/filtered`, {
+        params: {
+          eventType,
+          startDate,
+          endDate,
+        },
+        headers: { Authorization: `Bearer ${TokenManager.getAccessToken()}` },
+      })
+      .then((response) => response.data.filteredReservations),
 };
 
 export default ReservationAPI;
