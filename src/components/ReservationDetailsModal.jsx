@@ -146,6 +146,21 @@ const filteredUsers = userIsAdmin
   )
 : userItems;
 
+const isUserAllowedToEdit = () => {
+  // Check if the user is an admin
+  if (userIsAdmin) {
+    return true;
+  }
+
+  // Check if the reservation is upcoming or in the past
+  const currentDate = new Date();
+  const reservationDate = new Date(reservationDetails.reservationDate);
+  const daysDifference = Math.floor((reservationDate - currentDate) / (24 * 60 * 60 * 1000));
+
+
+  return reservationDate > currentDate && daysDifference >= 7;
+};
+
 return (
   <CustomModal
     isOpen={!!reservationDetails}
@@ -237,13 +252,18 @@ return (
             <p>End Time: {reservationDetails.endTime}</p>
           </>
         )}
-
-        {!isEditing && (userIsAdmin || userIsReservationOwner) && (
+        {!isEditing && (userIsAdmin || isUserAllowedToEdit())  && (
           <div className="form-actions row-centered">
             <button className="btn btn-success" onClick={handleEditClick}>Edit</button>
             <button className="btn btn-danger ml-2" onClick={handleDeleteClick}>Delete</button>
           </div>
         )}
+        {/* {!isEditing && (userIsAdmin || userIsReservationOwner) && (
+          <div className="form-actions row-centered">
+            <button className="btn btn-success" onClick={handleEditClick}>Edit</button>
+            <button className="btn btn-danger ml-2" onClick={handleDeleteClick}>Delete</button>
+          </div>
+        )} */}
 
         {/* {isEditing && (
           <div className="form-actions row-centered">
