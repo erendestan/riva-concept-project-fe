@@ -13,6 +13,7 @@ import ReservationAPI from '../api/ReservationAPI';
 import { info } from 'autoprefixer';
 
 
+
 const containerStyle = {
   overflowY: 'auto',
   marginTop: '70px',
@@ -185,15 +186,41 @@ function ReservationCalendar(props) {
     });
   };
 
+  const handleStartDateChange = (e) => {
+    const selectedStartDate = e.target.value;
+    setStartDateFilter(selectedStartDate);
+
+    // If an end date is already selected and it is earlier than the start date, show a toast error
+    if (endDateFilter && selectedStartDate > endDateFilter) {
+      toast.error('End date cannot be earlier than the start date.');
+      setEndDateFilter(null); // Reset end date
+    }
+  };
+
+  const handleEndDateChange = (e) => {
+    const selectedEndDate = e.target.value;
+    setEndDateFilter(selectedEndDate);
+
+    // If a start date is selected and the end date is earlier than the start date, show a toast error
+    if (startDateFilter && selectedEndDate < startDateFilter) {
+      toast.error('End date cannot be earlier than the start date.');
+      setEndDateFilter(null); // Reset end date
+    }
+  };
+
   const handleReset = () => {
     // Implement the logic for resetting filters
     // You can reset eventTypeFilter, startDateFilter, and endDateFilter here
     setEventTypeFilter(null);
     setStartDateFilter(null);
     setEndDateFilter(null);
+    document.getElementById('startDateInput').value = '';
+    document.getElementById('endDateInput').value = '';
     // You may want to refetch the data without filters or apply a default set of filters.
     fetchReservationsData({});
   };
+
+
 
   return (
     <div style={containerStyle}>
@@ -205,7 +232,17 @@ function ReservationCalendar(props) {
       </div>
       {/* Filter Controls */}
       <div className="row">
-        <label className="col-3">
+      <label className="col-3">
+        Event Type:
+        <select value={eventTypeFilter || ''} onChange={(e) => setEventTypeFilter(e.target.value)}>
+          <option value="" disabled>Select event type</option>
+          <option value="WEDDING">Wedding</option>
+          <option value="GRADUATION_CEREMONY">Graduation Ceremony</option>
+          <option value="COCKTAIL_EVENT">Cocktail Event</option>
+          <option value="OTHER">Other</option>
+        </select>
+      </label>
+        {/* <label className="col-3">
           Event Type:
           <select value={eventTypeFilter} onChange={(e) => setEventTypeFilter(e.target.value)}>
             <option value="WEDDING">Wedding</option>
@@ -213,15 +250,23 @@ function ReservationCalendar(props) {
             <option value="COCKTAIL_EVENT">Cocktail Event</option>
             <option value="OTHER">Other</option>
         </select>
-        </label>
+        </label> */}
         <label className="col-3">
+        Start Date:
+        <input id="startDateInput" type="date" value={startDateFilter} onChange={handleStartDateChange} />
+      </label>
+      <label className="col-3">
+        End Date:
+        <input id="endDateInput" type="date" value={endDateFilter} onChange={handleEndDateChange} />
+      </label>
+        {/* <label className="col-3">
           Start Date:
           <input type="date" value={startDateFilter} onChange={(e) => setStartDateFilter(e.target.value)} />
         </label>
         <label className="col-3">
           End Date:
           <input type="date" value={endDateFilter} onChange={(e) => setEndDateFilter(e.target.value)} />
-        </label>
+        </label> */}
         {/* <button className="col-2 btn btn-primary mt-3 mb-1" onClick={handleFilterChange}>
           Apply Filters
         </button> */}
@@ -242,6 +287,10 @@ function ReservationCalendar(props) {
           events={eventList}
           eventContent={eventContent}
           eventClick={(info) => handleEventClick(info)}
+          // validRange={{
+          //   start: startDateFilter ? startDateFilter : null,
+          //   end: endDateFilter ? endDateFilter : null,
+          // }}
         />
         {showEventForm && (
           <ReservationDetailsForm

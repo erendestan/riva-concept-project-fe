@@ -1,0 +1,38 @@
+.reservation-details-form-container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .reservation-details-form label {
+    display: block;
+    margin-bottom: 10px;
+  }
+  
+  .reservation-details-form input,
+  .reservation-details-form select {
+    width: calc(100% - 20px); /* Adjusted width and removed padding for consistency */
+    padding: 10px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+  }
+  
+  .reservation-details-form select {
+    height: 38px;
+  }
+  
+  .reservation-details-form .form-actions {
+    display: flex;
+    justify-content: flex-end; /* Align the button to the right */
+    align-items: center;
+  }
+
+ .inputfield{
+    width:100%;
+    box-sizing:border-box;
+  }
+  

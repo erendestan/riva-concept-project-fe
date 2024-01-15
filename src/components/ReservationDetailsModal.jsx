@@ -5,6 +5,7 @@ import ReservationAPI from '../api/ReservationAPI';
 import TokenManager from '../api/TokenManager';
 import UserAPI from '../api/UserApi';
 import { toast } from 'react-hot-toast';
+import "../styling/updatereservationmodal-style.css"
 
 const ReservationDetailsModal = ({ reservationId, onClose }) => {
   const [reservationDetails, setReservationDetails] = useState(null);
@@ -151,66 +152,83 @@ return (
     toggle={onClose}
     title="Reservation Details"
     onCancel={onClose}
+    onSave={isEditing ? handleSaveClick : undefined}
   >
     {reservationDetails && (
-      <div>
+      <div className="reservation-details-modal-container">
         {!userIsAdmin && (
-          <p>User: {reservationDetails.user.firstName} {reservationDetails.user.lastName}</p>
+          <p className="row-centered">User: {reservationDetails.user.firstName} {reservationDetails.user.lastName}</p>
         )}
 
         {userIsAdmin && !isEditing && (
-          <p>User: {reservationDetails.user.firstName} {reservationDetails.user.lastName}</p>
+          <p className="row-centered">User: {reservationDetails.user.firstName} {reservationDetails.user.lastName}</p>
         )}
 
         {userIsAdmin && isEditing && (
           <>
-            <label>
-              Filter Users:
-              <input
-                type="text"
-                value={userFilter}
-                onChange={(e) => setUserFilter(e.target.value)}
-                placeholder="Enter user's info"
-              />
-            </label>
-            <label>
-              Select User:
-              <select
-                value={selectedUserId || ''}
-                onChange={(e) => setSelectedUserId(e.target.value)}
-              >
-                <option value="">Select User</option>
-                {filteredUsers.map((user) => (
-                  <option key={user.id} value={user.id}>
-                    {`${user.firstName} ${user.lastName}`}
-                  </option>
-                ))}
-              </select>
-            </label>
+            <div className="row-centered mb-3">
+              <div className="col-12">
+                <label>
+                  Filter Users:
+                  <input
+                    type="text"
+                    value={userFilter}
+                    onChange={(e) => setUserFilter(e.target.value)}
+                    placeholder="Enter user's info"
+                  />
+                </label>
+              </div>
+            </div>
+            <div className="row-centered mb-3">
+              <div className="col-12">
+                <label>
+                  Select User:
+                  <select
+                    value={selectedUserId || ''}
+                    onChange={(e) => setSelectedUserId(e.target.value)}
+                  >
+                    <option value="">Select User</option>
+                    {filteredUsers.map((user) => (
+                      <option key={user.id} value={user.id}>
+                        {`${user.firstName} ${user.lastName}`}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </div>
+            </div>
           </>
         )}
 
         {isEditing ? (
           <>
-            <label>
-              Event Type:
-              <select value={eventType} onChange={(e) => setEventType(e.target.value)}>
-                <option value="WEDDING">Wedding</option>
-                <option value="GRADUATION_CEREMONY">Graduation Ceremony</option>
-                <option value="COCKTAIL_EVENT">Cocktail Event</option>
-                <option value="OTHER">Other</option>
-              </select>
-            </label>
-            <br />
-            <label>
-              Start Time:
-              <input type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)} />
-            </label>
-            <br />
-            <label>
-              End Time:
-              <input type="time" value={endTime} onChange={(e) => setEndTime(e.target.value)} />
-            </label>
+            <div className="row mb-3">
+              <div className="col-12">
+                <label>
+                  Event Type:
+                  <select value={eventType} onChange={(e) => setEventType(e.target.value)}>
+                    <option value="WEDDING">Wedding</option>
+                    <option value="GRADUATION_CEREMONY">Graduation Ceremony</option>
+                    <option value="COCKTAIL_EVENT">Cocktail Event</option>
+                    <option value="OTHER">Other</option>
+                  </select>
+                </label>
+              </div>
+            </div>
+            <div className="row mb-3">
+              <div className="col-6">
+                <label>
+                  Start Time:
+                  <input type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)} />
+                </label>
+              </div>
+              <div className="col-6">
+                <label>
+                  End Time:
+                  <input type="time" value={endTime} onChange={(e) => setEndTime(e.target.value)} />
+                </label>
+              </div>
+            </div>
           </>
         ) : (
           <>
@@ -221,19 +239,111 @@ return (
         )}
 
         {!isEditing && (userIsAdmin || userIsReservationOwner) && (
-          <>
+          <div className="form-actions row-centered">
             <button className="btn btn-success" onClick={handleEditClick}>Edit</button>
             <button className="btn btn-danger ml-2" onClick={handleDeleteClick}>Delete</button>
-          </>
+          </div>
         )}
 
-        {isEditing && (
-          <button className="btn btn-success" onClick={handleSaveClick}>Save</button>
-        )}
+        {/* {isEditing && (
+          <div className="form-actions row-centered">
+            <button className="btn btn-success" onClick={handleSaveClick}>Save</button>
+          </div>
+        )} */}
       </div>
     )}
   </CustomModal>
 );
+
+// return (
+//   <CustomModal
+//     isOpen={!!reservationDetails}
+//     toggle={onClose}
+//     title="Reservation Details"
+//     onCancel={onClose}
+//   >
+//     {reservationDetails && (
+//       <div>
+//         {!userIsAdmin && (
+//           <p>User: {reservationDetails.user.firstName} {reservationDetails.user.lastName}</p>
+//         )}
+
+//         {userIsAdmin && !isEditing && (
+//           <p>User: {reservationDetails.user.firstName} {reservationDetails.user.lastName}</p>
+//         )}
+
+//         {userIsAdmin && isEditing && (
+//           <>
+//             <label>
+//               Filter Users:
+//               <input
+//                 type="text"
+//                 value={userFilter}
+//                 onChange={(e) => setUserFilter(e.target.value)}
+//                 placeholder="Enter user's info"
+//               />
+//             </label>
+//             <label>
+//               Select User:
+//               <select
+//                 value={selectedUserId || ''}
+//                 onChange={(e) => setSelectedUserId(e.target.value)}
+//               >
+//                 <option value="">Select User</option>
+//                 {filteredUsers.map((user) => (
+//                   <option key={user.id} value={user.id}>
+//                     {`${user.firstName} ${user.lastName}`}
+//                   </option>
+//                 ))}
+//               </select>
+//             </label>
+//           </>
+//         )}
+
+//         {isEditing ? (
+//           <>
+//             <label>
+//               Event Type:
+//               <select value={eventType} onChange={(e) => setEventType(e.target.value)}>
+//                 <option value="WEDDING">Wedding</option>
+//                 <option value="GRADUATION_CEREMONY">Graduation Ceremony</option>
+//                 <option value="COCKTAIL_EVENT">Cocktail Event</option>
+//                 <option value="OTHER">Other</option>
+//               </select>
+//             </label>
+//             <br />
+//             <label>
+//               Start Time:
+//               <input type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)} />
+//             </label>
+//             <br />
+//             <label>
+//               End Time:
+//               <input type="time" value={endTime} onChange={(e) => setEndTime(e.target.value)} />
+//             </label>
+//           </>
+//         ) : (
+//           <>
+//             <p>Event Type: {formatEventType(reservationDetails.eventType)}</p>
+//             <p>Start Time: {reservationDetails.startTime}</p>
+//             <p>End Time: {reservationDetails.endTime}</p>
+//           </>
+//         )}
+
+//         {!isEditing && (userIsAdmin || userIsReservationOwner) && (
+//           <>
+//             <button className="btn btn-success" onClick={handleEditClick}>Edit</button>
+//             <button className="btn btn-danger ml-2" onClick={handleDeleteClick}>Delete</button>
+//           </>
+//         )}
+
+//         {isEditing && (
+//           <button className="btn btn-success" onClick={handleSaveClick}>Save</button>
+//         )}
+//       </div>
+//     )}
+//   </CustomModal>
+// );
 
 };
 

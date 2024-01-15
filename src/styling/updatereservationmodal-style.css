@@ -1,0 +1,56 @@
+.reservation-details-modal-container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .reservation-details-modal label {
+    display: block;
+    margin-bottom: 10px;
+  }
+  
+  .reservation-details-modal input,
+  .reservation-details-modal select {
+    width: 100%; /* Adjusted width for consistency */
+    padding: 10px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+  }
+  
+  .reservation-details-modal select {
+    height: 38px;
+  }
+  
+  .reservation-details-modal .row-centered {
+    text-align: center;
+  }
+  
+  .reservation-details-modal .row-centered label {
+    display: inline-block;
+    text-align: left;
+    width: 100%; /* Make label take full width */
+  }
+  
+  .reservation-details-modal .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 15px;
+  }
+  
+  .reservation-details-modal button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .reservation-details-modal button:hover {
+    background-color: #0056b3;
+  }

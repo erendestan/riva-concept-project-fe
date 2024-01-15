@@ -519,7 +519,29 @@ const onPrivateMessageReceived = (payload) => {
       }
 
       stompClient.send('/app/private-message', {}, JSON.stringify(chatMessage));
-      console.log("Kullaniciya mesaj")
+      console.log("Sending message to customer from admin")
+      setUserData({ ...userData, message: '' });
+    }
+  };
+
+  const sendAdminValue = () => {
+    if (stompClient) {
+      const adminEmail = 'designdocument@gmail.com';
+      let chatMessage = {
+        senderName: userData.email,
+        receiverName: adminEmail,
+        message: userData.message,
+        status: 'MESSAGE',
+      };
+  
+      //Try to do the one on the customer with map(setPrivateChats)
+      setAdminChats((prevChats) => {
+        const newChats = prevChats ? [...prevChats, chatMessage] : [chatMessage];
+        return newChats;
+      });
+  
+      stompClient.send('/app/private-message', {}, JSON.stringify(chatMessage));
+      console.log("Sending message to admin from customer");
       setUserData({ ...userData, message: '' });
     }
   };
@@ -582,26 +604,7 @@ const onPrivateMessageReceived = (payload) => {
 //   }
 // };
 
-const sendAdminValue = () => {
-  if (stompClient) {
-    const adminEmail = 'designdocument@gmail.com';
-    let chatMessage = {
-      senderName: userData.email,
-      receiverName: adminEmail,
-      message: userData.message,
-      status: 'MESSAGE',
-    };
 
-    setAdminChats((prevChats) => {
-      const newChats = prevChats ? [...prevChats, chatMessage] : [chatMessage];
-      return newChats;
-    });
-
-    stompClient.send('/app/private-message', {}, JSON.stringify(chatMessage));
-    console.log("Admine mesaj");
-    setUserData({ ...userData, message: '' });
-  }
-};
 
 return (
   <div style={containerStyle} className="container">

@@ -7,6 +7,7 @@ import TokenManager from '../api/TokenManager';
 import UserAPI from '../api/UserApi';
 import ReservationAPI from '../api/ReservationAPI';
 import {toast} from 'react-hot-toast';
+import "../styling/addreservationmodal-style.css"
 
 const ReservationDetailsForm = ({ selectedDate, onClose, onSave, isAddEventButtonClicked, userItems}) => {
   const [eventType, setEventType] = useState('WEDDING');
@@ -100,68 +101,93 @@ return (
     onCancel={onClose}
     onSubmit={handleSave}
   >
-    <div>
+    <div className="reservation-details-form-container">
       {isAddEventButtonClicked ? (
-        <label>
-          Select Date:
-          <input
-            type="date"
-            value={selectedFormDate.toISOString().split('T')[0]}
-            onChange={(e) => setSelectedFormDate(new Date(e.target.value))}
-          />
-        </label>
+        <div className="row mb-3">
+          <div className="col-12">
+            <label>
+              Select Date:
+              <input
+                type="date"
+                value={selectedFormDate.toISOString().split('T')[0]}
+                onChange={(e) => setSelectedFormDate(new Date(e.target.value))}
+              />
+            </label>
+          </div>
+        </div>
       ) : (
-        <p>Date: {selectedFormDate && selectedFormDate.toLocaleDateString()}</p>
+        <div className="row mb-3">
+          <div className="col-12">
+            <p>Date: {selectedFormDate && selectedFormDate.toLocaleDateString()}</p>
+          </div>
+        </div>
       )}
 
       {claims && claims.roles && claims.roles.includes('ADMIN') && (
         <>
-          <label>
-            Filter Users:
-            <input
-              type="text"
-              value={userFilter}
-              onChange={(e) => setUserFilter(e.target.value)}
-              placeholder="Enter user's info"
-            />
-          </label>
-          <label>
-            Select User:
-            <select
-              value={selectedUserId || ''}
-              onChange={(e) => setSelectedUserId(e.target.value)}
-            >
-              <option value="">Select User</option>
-              {filteredUsers.map((user) => (
-                <option key={user.id} value={user.id}>
-                  {`${user.firstName} ${user.lastName}`}
-                  {/* {`${user.firstName} ${user.lastName} (${user.email}, ${user.phoneNumber})`} */}
-                </option>
-              ))}
-            </select>
-          </label>
+          <div className="row mb-3">
+            <div className="col-12">
+              <label>
+                Filter Users:
+                <input
+                  type="text"
+                  value={userFilter}
+                  onChange={(e) => setUserFilter(e.target.value)}
+                  placeholder="Enter user's info"
+                  className='inputfield'
+                />
+              </label>
+            </div>
+          </div>
+          <div className="row mb-3">
+            <div className="col-12">
+              <label>
+                Select User:
+                <select className='inputfield'
+                  value={selectedUserId || ''}
+                  onChange={(e) => setSelectedUserId(e.target.value)}
+                >
+                  <option value="">Select User</option>
+                  {filteredUsers.map((user) => (
+                    <option key={user.id} value={user.id}>
+                      {`${user.firstName} ${user.lastName}`}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
+          </div>
         </>
       )}
 
-      <label>
-        Event Type:
-        <select value={eventType} onChange={(e) => setEventType(e.target.value)}>
-          <option value="WEDDING">Wedding</option>
-          <option value="GRADUATION_CEREMONY">Graduation Ceremony</option>
-          <option value="COCKTAIL_EVENT">Cocktail Event</option>
-          <option value="OTHER">Other</option>
-        </select>
-      </label>
-      <br />
-      <label>
-        Start Time:
-        <input type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)} />
-      </label>
-      <br />
-      <label>
-        End Time:
-        <input type="time" value={endTime} onChange={(e) => setEndTime(e.target.value)} />
-      </label>
+      <div className="row mb-3">
+        <div className="col-12">
+          <label>
+            Event Type:
+            <select className='inputfield' value={eventType} onChange={(e) => setEventType(e.target.value)}>
+              <option value="WEDDING">Wedding</option>
+              <option value="GRADUATION_CEREMONY">Graduation Ceremony</option>
+              <option value="COCKTAIL_EVENT">Cocktail Event</option>
+              <option value="OTHER">Other</option>
+            </select>
+          </label>
+        </div>
+      </div>
+
+      <div className="row mb-3">
+        <div className="col-6">
+          <label>
+            Start Time:
+            <input type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)} />
+          </label>
+        </div>
+        <div className="col-6">
+          <label>
+            End Time:
+            <input type="time" value={endTime} onChange={(e) => setEndTime(e.target.value)} />
+          </label>
+        </div>
+      </div>
     </div>
   </CustomModal>
 );
@@ -190,23 +216,34 @@ return (
 //       )}
 
 //       {claims && claims.roles && claims.roles.includes('ADMIN') && (
-//         <label>
-//           Select User:
-//           <select
-//             value={selectedUserId || ''}
-//             onChange={(e) => setSelectedUserId(e.target.value)}
-//           >
-//             <option value="">Select User</option>
-//             {userItems.map((user) => (
-//               <option key={user.id} value={user.id}>
-//                 {`${user.firstName} ${user.lastName}`}
-//               </option>
-//             ))}
-//           </select>
-//         </label>
+//         <>
+//           <label>
+//             Filter Users:
+//             <input
+//               type="text"
+//               value={userFilter}
+//               onChange={(e) => setUserFilter(e.target.value)}
+//               placeholder="Enter user's info"
+//             />
+//           </label>
+//           <label>
+//             Select User:
+//             <select
+//               value={selectedUserId || ''}
+//               onChange={(e) => setSelectedUserId(e.target.value)}
+//             >
+//               <option value="">Select User</option>
+//               {filteredUsers.map((user) => (
+//                 <option key={user.id} value={user.id}>
+//                   {`${user.firstName} ${user.lastName}`}
+//                   {/* {`${user.firstName} ${user.lastName} (${user.email}, ${user.phoneNumber})`} */}
+//                 </option>
+//               ))}
+//             </select>
+//           </label>
+//         </>
 //       )}
 
-//       {/* Rest of the form */}
 //       <label>
 //         Event Type:
 //         <select value={eventType} onChange={(e) => setEventType(e.target.value)}>

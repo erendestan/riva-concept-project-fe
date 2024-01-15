@@ -9,6 +9,7 @@ export default function CustomModal({
   cancelText,
   onSubmit,
   submitText,
+  onSave,
   onDelete,
   deleteText,
   children,
@@ -35,8 +36,13 @@ export default function CustomModal({
           </Button>
         )}
         {onSubmit && (
-          <Button color="primary" onClick={onSubmit}>
+          <Button color="success" onClick={onSubmit}>
             {submitText || "Submit"}
+          </Button>
+        )}
+        {onSave && (
+          <Button color="success" onClick={onSave}>
+            {submitText || "Save"}
           </Button>
         )}
       </ModalFooter>
