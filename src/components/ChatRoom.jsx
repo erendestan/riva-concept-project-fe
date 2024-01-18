@@ -19,12 +19,14 @@ const ChatRoom = () => {
   const [chatHistory, setChatHistory] = useState([]);
   const [tabs, setTabs] = useState([]);
 
+  const [initialPrivateChats, setInitialPrivateChats] = useState(new Map());
+
   useEffect(() => {
     console.log(userData);
   }, [userData]);
 
   const containerStyle = {
-    marginTop: '70px',
+    marginTop: '80px',
     marginBottom: '20px',
   };
 
@@ -53,24 +55,20 @@ const ChatRoom = () => {
     console.log(err);
   };
 
-  const onPrivateMessageReceived = (payload) => {
+  const onPrivateMessageReceived = async (payload) => {
     let payloadData = JSON.parse(payload.body);
-
-    
-
+  
     if (payloadData.senderEmail === 'designdocument@gmail.com') {
       setAdminChats((prevChats) => [...prevChats, payloadData]);
     } else {
-      if (privateChats.get(payloadData.senderEmail)) {
-        privateChats.get(payloadData.senderEmail).push(payloadData);
-        setPrivateChats(new Map(privateChats));
-      } else {
-        let list = [];
-        list.push(payloadData);
-
-        privateChats.set(payloadData.senderEmail, list);
-        setPrivateChats(new Map(privateChats));
-      }
+      // Fetch and update the private chat history for the specific user
+      const history = await ChatMessageAPI.getChatHistory(payloadData.senderEmail);
+  
+      setPrivateChats((prevPrivateChats) => {
+        const updatedChats = new Map(prevPrivateChats);
+        updatedChats.set(payloadData.senderEmail, history);
+        return updatedChats;
+      });
     }
   };
 
@@ -120,6 +118,7 @@ const ChatRoom = () => {
     }
   };
 
+
   const handleMessage = (event) => {
     const { value } = event.target;
     setUserData({ ...userData, message: value });
@@ -148,6 +147,43 @@ const ChatRoom = () => {
     connect();
     setTab('ADMIN'); // Connect to the admin tab by default
   
+    // const fetchChatHistory = async () => {
+    //   try {
+    //     const claims = TokenManager.getClaims();
+    //     console.log('Token Claims:', claims);
+    
+    //     if (claims && claims.email) {
+    //       const history = await ChatMessageAPI.getChatHistory(claims.email);
+    //       setChatHistory(history);
+    //       console.log('Chat History:', history);
+    
+    //       if (claims.email === 'designdocument@gmail.com') {
+    //         const adminHistory = await ChatMessageAPI.getChatHistory('designdocument@gmail.com');
+    //         console.log('Admin Chat History:', adminHistory);
+    
+    //         // Extract unique users from the admin chat history
+    //         const adminTabs = Array.from(new Set(adminHistory.map(chat => chat.senderEmail)))
+    //           .filter(email => email !== 'designdocument@gmail.com');
+    
+    //         console.log('admin tabs:', adminTabs);
+    
+    //         // Update the state with the extracted users as tabs
+    //         setTabs(() => ['ADMIN', ...adminTabs]); // Include 'ADMIN' as a default tab
+    //         setAdminChats(adminHistory);
+    //       } else {
+    //         // For regular users, extract unique users from the chat history
+    //         const userTabs = Array.from(new Set(history.map(chat => chat.senderEmail)))
+    //           .filter(email => email !== claims.email);
+    
+    //         // Update the state with the extracted users as tabs
+    //         setTabs(['ADMIN', ...userTabs]); // Include 'ADMIN' as a default tab
+    //       }
+    //     }
+    //   } catch (error) {
+    //     console.error('Error fetching chat history:', error);
+    //   }
+    // };
+
     const fetchChatHistory = async () => {
       try {
         const claims = TokenManager.getClaims();
@@ -170,6 +206,12 @@ const ChatRoom = () => {
     
             // Update the state with the extracted users as tabs
             setTabs(() => ['ADMIN', ...adminTabs]); // Include 'ADMIN' as a default tab
+    
+            // Set the first admin tab as the default tab
+            if (adminTabs.length > 0) {
+              setTab(adminTabs[0]);
+            }
+    
             setAdminChats(adminHistory);
           } else {
             // For regular users, extract unique users from the chat history
@@ -196,14 +238,11 @@ const ChatRoom = () => {
     }
   }, []);
 
-  const onAdminMessageReceived = (payload) => {
-    let payloadData = JSON.parse(payload.body);
-    if (adminChats) {
-      setAdminChats([...adminChats, payloadData]);
-    } else {
-      setAdminChats([payloadData]);
-    }
-  };
+  const onAdminMessageReceived = async (payload) => {
+    // Fetch and update the admin chat history
+    const adminHistory = await ChatMessageAPI.getChatHistory('designdocument@gmail.com');
+    setAdminChats(adminHistory);
+  }
 
   return (
     <div style={containerStyle} className="container">
