@@ -11,6 +11,7 @@ import { toast } from "react-hot-toast";
 import UserAPI from '../api/UserApi';
 import ReservationAPI from '../api/ReservationAPI';
 import { info } from 'autoprefixer';
+import TokenManager from '../api/TokenManager';
 
 
 
@@ -141,6 +142,10 @@ function ReservationCalendar(props) {
   );
 
   const handleEventClick = (arg) => {
+    console.log('Logged-in user ID:', TokenManager.getClaims()?.userId);
+    console.log('Selected reservation owner ID:', arg.event.extendedProps.user.id);
+  
+    // Continue with the existing logic
     const reservationId = arg.event.id;
     setClickedReservationId(reservationId);
   };

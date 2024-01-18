@@ -164,10 +164,10 @@ const isUserAllowedToEdit = () => {
 return (
   <CustomModal
     isOpen={!!reservationDetails}
-    toggle={onClose}
-    title="Reservation Details"
-    onCancel={onClose}
-    onSave={isEditing ? handleSaveClick : undefined}
+      toggle={onClose}
+      title="Reservation Details"
+      onCancel={onClose}
+      onSave={isEditing ? handleSaveClick : undefined}
   >
     {reservationDetails && (
       <div className="reservation-details-modal-container">
@@ -252,118 +252,16 @@ return (
             <p>End Time: {reservationDetails.endTime}</p>
           </>
         )}
-        {!isEditing && (userIsAdmin || isUserAllowedToEdit())  && (
+        {!isEditing && (userIsAdmin || userIsReservationOwner) && isUserAllowedToEdit()  && (
           <div className="form-actions row-centered">
             <button className="btn btn-success" onClick={handleEditClick}>Edit</button>
             <button className="btn btn-danger ml-2" onClick={handleDeleteClick}>Delete</button>
           </div>
         )}
-        {/* {!isEditing && (userIsAdmin || userIsReservationOwner) && (
-          <div className="form-actions row-centered">
-            <button className="btn btn-success" onClick={handleEditClick}>Edit</button>
-            <button className="btn btn-danger ml-2" onClick={handleDeleteClick}>Delete</button>
-          </div>
-        )} */}
-
-        {/* {isEditing && (
-          <div className="form-actions row-centered">
-            <button className="btn btn-success" onClick={handleSaveClick}>Save</button>
-          </div>
-        )} */}
       </div>
     )}
   </CustomModal>
 );
-
-// return (
-//   <CustomModal
-//     isOpen={!!reservationDetails}
-//     toggle={onClose}
-//     title="Reservation Details"
-//     onCancel={onClose}
-//   >
-//     {reservationDetails && (
-//       <div>
-//         {!userIsAdmin && (
-//           <p>User: {reservationDetails.user.firstName} {reservationDetails.user.lastName}</p>
-//         )}
-
-//         {userIsAdmin && !isEditing && (
-//           <p>User: {reservationDetails.user.firstName} {reservationDetails.user.lastName}</p>
-//         )}
-
-//         {userIsAdmin && isEditing && (
-//           <>
-//             <label>
-//               Filter Users:
-//               <input
-//                 type="text"
-//                 value={userFilter}
-//                 onChange={(e) => setUserFilter(e.target.value)}
-//                 placeholder="Enter user's info"
-//               />
-//             </label>
-//             <label>
-//               Select User:
-//               <select
-//                 value={selectedUserId || ''}
-//                 onChange={(e) => setSelectedUserId(e.target.value)}
-//               >
-//                 <option value="">Select User</option>
-//                 {filteredUsers.map((user) => (
-//                   <option key={user.id} value={user.id}>
-//                     {`${user.firstName} ${user.lastName}`}
-//                   </option>
-//                 ))}
-//               </select>
-//             </label>
-//           </>
-//         )}
-
-//         {isEditing ? (
-//           <>
-//             <label>
-//               Event Type:
-//               <select value={eventType} onChange={(e) => setEventType(e.target.value)}>
-//                 <option value="WEDDING">Wedding</option>
-//                 <option value="GRADUATION_CEREMONY">Graduation Ceremony</option>
-//                 <option value="COCKTAIL_EVENT">Cocktail Event</option>
-//                 <option value="OTHER">Other</option>
-//               </select>
-//             </label>
-//             <br />
-//             <label>
-//               Start Time:
-//               <input type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)} />
-//             </label>
-//             <br />
-//             <label>
-//               End Time:
-//               <input type="time" value={endTime} onChange={(e) => setEndTime(e.target.value)} />
-//             </label>
-//           </>
-//         ) : (
-//           <>
-//             <p>Event Type: {formatEventType(reservationDetails.eventType)}</p>
-//             <p>Start Time: {reservationDetails.startTime}</p>
-//             <p>End Time: {reservationDetails.endTime}</p>
-//           </>
-//         )}
-
-//         {!isEditing && (userIsAdmin || userIsReservationOwner) && (
-//           <>
-//             <button className="btn btn-success" onClick={handleEditClick}>Edit</button>
-//             <button className="btn btn-danger ml-2" onClick={handleDeleteClick}>Delete</button>
-//           </>
-//         )}
-
-//         {isEditing && (
-//           <button className="btn btn-success" onClick={handleSaveClick}>Save</button>
-//         )}
-//       </div>
-//     )}
-//   </CustomModal>
-// );
 
 };
 
