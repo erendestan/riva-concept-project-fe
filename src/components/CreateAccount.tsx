@@ -167,6 +167,7 @@ function CreateAccount() {
             )}
 
             <MDBBtn
+              data-testid="create-account-button"
               onClick={handleSubmit}
               className="mb-4 px-5 mx-5 w-100"
               color="info"

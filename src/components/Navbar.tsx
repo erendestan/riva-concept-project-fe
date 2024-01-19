@@ -82,6 +82,11 @@ const links = [
   },
   {
     id: 12,
+    path: "/chatRoom",
+    text: "Chatroom",
+  },
+  {
+    id: 13,
     path: "/adminuserpanel",
     text: "Admin Panel",
   },
@@ -153,6 +158,15 @@ const NavbarRiva = () => {
               {link.id === 12 && (
                 <Nav>
                   <Nav.Link href={link.path}>
+                    {isAuthenticated ? (
+                      <Button variant="primary">{link.text}</Button>
+                    ) : null}
+                  </Nav.Link>
+                </Nav>
+              )}
+              {link.id === 13 && (
+                <Nav>
+                  <Nav.Link href={link.path}>
                     {isAuthenticated && isAdmin ? (
                       <Button variant="primary">{link.text}</Button>
                     ) : null}
@@ -186,80 +200,6 @@ const NavbarRiva = () => {
       </Container>
     </Navbar>
   );
-
-  // return (
-  //   <Navbar collapseOnSelect expand="lg" className="fixed-top navbar-scroll">
-  //     <Container>
-  //       <Navbar.Brand href="/">
-  //         <img src={RivaLogo} alt="Riva Logo" width="50" height="50" />
-  //       </Navbar.Brand>
-  //       <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-  //       <Navbar.Collapse id="responsive-navbar-nav">
-  //         {/* <Nav className="me-auto"> */}
-  //         {links.map((link) => {
-  //           if (link.id < 4) {
-  //             return (
-  //               <Nav className="me-auto" key={link.id}>
-  //                 {
-  //                   <Nav.Link className="text-white" href={link.path}>
-  //                     {link.text}
-  //                   </Nav.Link>
-  //                 }
-  //               </Nav>
-  //             );
-  //           }
-  //           if (link.id > 3 && link.id < 7) {
-  //             if (link.id !== 6) {
-  //               return (
-  //                 <Nav key={link.id}>
-  //                   <Nav.Link
-  //                     eventKey={link.eventkey}
-  //                     className="hover-animation"
-  //                     href={link.path}
-  //                   >
-  //                     {link.icon}
-  //                   </Nav.Link>
-  //                 </Nav>
-  //               );
-  //             } else {
-  //               return (
-  //                 <Nav key={link.id}>
-  //                   <Nav.Link
-  //                     eventKey={link.eventkey}
-  //                     className="hover-animation text-white"
-  //                     href={link.path}
-  //                   >
-  //                     {link.icon}
-  //                     <span> </span>
-  //                     {link.text}
-  //                   </Nav.Link>
-  //                 </Nav>
-  //               );
-  //             }
-  //           } else {
-  //             if (isAuthenticated) {
-  //               return (
-  //                 <Nav key={link.id}>
-  //                   <Button variant="primary" onClick={TokenManager.clear}>
-  //                     {link.text}
-  //                   </Button>
-  //                 </Nav>
-  //               );
-  //             } else {
-  //               return (
-  //                 <Nav key={link.id}>
-  //                   <Nav.Link href={link.path}>
-  //                     <Button variant="primary">{link.text}</Button>
-  //                   </Nav.Link>
-  //                 </Nav>
-  //               );
-  //             }
-  //           }
-  //         })}
-  //       </Navbar.Collapse>
-  //     </Container>
-  //   </Navbar>
-  // );
 };
 
 export default NavbarRiva;
