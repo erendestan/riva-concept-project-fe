@@ -32,10 +32,9 @@ export default function UserProfilePage(props){
       }
       else{
         return(
-            <div className="container mt-4">
-                <h1 style={containerStyle} className="text-center">User Profile</h1>
+            <>
                 <UserProfile/>
-            </div>
+            </>
             
         )
       }

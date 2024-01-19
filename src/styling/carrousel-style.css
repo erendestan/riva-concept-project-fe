@@ -1,6 +1,7 @@
 #photogallery{
     height: 120vh;
     background-color: bisque;
+    padding-top: 60px;
 }
 
 .centeringContainerStyle{

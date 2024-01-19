@@ -6,9 +6,8 @@ export default function EditUserPage() {
     const {id} = useParams();
 
     return(
-        <div className="container mt-4">
-      <h1 className="text-center">Edit User</h1>
+    <>
       <EditUser userId ={id}/>
-    </div>
+    </>
     )
 }

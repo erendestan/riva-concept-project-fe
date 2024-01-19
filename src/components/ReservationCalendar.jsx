@@ -34,20 +34,6 @@ function ReservationCalendar(props) {
 
     const {userItems}  = props;
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const reservationsData = await ReservationAPI.getAllReservations();
-  //       setReservations(reservationsData);
-  //       // console.log(reservationsData) //--> Debug
-  //     } catch (error) {
-  //       console.error('Error fetching reservations data:', error);
-  //     }
-      
-  //   };
-
-  //   fetchData();
-  // }, []);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -62,8 +48,6 @@ function ReservationCalendar(props) {
           eventTypeFilter,
           formattedStartDate,
           formattedEndDate
-          // startDateFilter,
-          // endDateFilter
         );
           
         setReservations(filteredReservationsData);
@@ -81,44 +65,44 @@ function ReservationCalendar(props) {
     const currentDate = new Date();
     const nextTwoDays = new Date();
     nextTwoDays.setDate(currentDate.getDate() + 2);
-
+  
+    // Check if the clicked date is within the specified range
     if (
-      clickedDate.getFullYear() === currentDate.getFullYear() &&
-      clickedDate.getMonth() === currentDate.getMonth() &&
-      clickedDate.getDate() === currentDate.getDate() ||
-      clickedDate < currentDate
+      (!startDateFilter || clickedDate >= new Date(startDateFilter)) &&
+      (!endDateFilter || clickedDate <= new Date(endDateFilter))
     ) {
-      toast.error('Selected date cannot be today or in the past!');
-    } else if (clickedDate < nextTwoDays) {
-      toast.error('Reservations for the next 2 days are not possible due to preparation times.');
-    } else {
-      // Check if there is a reservation on the selected date
-      const isDateTaken = reservations.some(
-        (reservation) =>
-          new Date(reservation.reservationDate).toDateString() === clickedDate.toDateString()
-      );
-
-      if(isDateTaken){
-        toast.error("Selected date is already taken. Please choose another date.")
-      }else{
-        setSelectedDate(clickedDate);
-        setShowEventForm(true); 
+      // Check if the clicked date is today or in the past
+      if (
+        clickedDate.getFullYear() === currentDate.getFullYear() &&
+        clickedDate.getMonth() === currentDate.getMonth() &&
+        clickedDate.getDate() === currentDate.getDate() ||
+        clickedDate < currentDate
+      ) {
+        toast.error('Selected date cannot be today or in the past!');
+      } else if (clickedDate < nextTwoDays) {
+        toast.error('Reservations for the next 2 days are not possible due to preparation times.');
+      } else {
+        // Check if there is a reservation on the selected date
+        const isDateTaken = reservations.some(
+          (reservation) =>
+            new Date(reservation.reservationDate).toDateString() === clickedDate.toDateString()
+        );
+  
+        if (isDateTaken) {
+          toast.error('Selected date is already taken. Please choose another date.');
+        } else {
+          setSelectedDate(clickedDate);
+          setShowEventForm(true);
+        }
       }
+    } else {
+      toast.error('Selected date is outside the valid range. Please choose a date within the specified range.');
     }
   };
 
   const handleEventFormClose = () => {
     setShowEventForm(false);
   };
-
-  // const getUserFullNameWithTime = (reservation) => {
-  //   const user = reservation.user;
-  //   const startTime = reservation.startTime;
-  //   const endTime = reservation.endTime;
-  //   const fullName = user ? `${user.firstName} ${user.lastName}` : 'Unknown User';
-  
-  //   return `${startTime} - ${endTime} ${fullName}`;
-  // };
 
   const getEventListTitle = (reservation) => {
     const user = reservation.user;
@@ -136,11 +120,55 @@ function ReservationCalendar(props) {
   }));
   
   const eventContent = ({ event }) => (
-        <div className='col-12'>
+        <div style={{ fontWeight: 'bold' }} className='col-12'>
           {event.title}
         </div>
   );
 
+  const dayCellContent = ({ date }) => {
+    const cellDate = new Date(date);
+  
+    let cellContent = (
+      <div>
+        <span>{cellDate.getDate()}</span>
+      </div>
+    );
+  
+    // Check if the cell date falls within the selected range
+    if (startDateFilter && endDateFilter) {
+      const start = new Date(startDateFilter);
+      const end = new Date(endDateFilter);
+  
+      // Set the time to the end of the day for proper comparison
+      end.setHours(23, 59, 59, 999);
+  
+      if (cellDate >= start && cellDate <= end) {
+        // Entire cell date falls within the selected range
+        cellContent = (
+          <div style={{ background: 'palegreen', borderRadius: '0%', height: '100%', width: '100%' }}>
+            {cellContent}
+          </div>
+        );
+      }
+    } else if (startDateFilter && cellDate >= new Date(startDateFilter)) {
+      // Only the start date is selected
+      cellContent = (
+        <div style={{ background: 'palegreen', borderRadius: '0%', height: '100%', width: '100%' }}>
+          {cellContent}
+        </div>
+      );
+    } else if (endDateFilter && cellDate <= new Date(endDateFilter)) {
+      // Only the end date is selected
+      cellContent = (
+        <div style={{ background: 'palegreen', borderRadius: '50%', height: '100%', width: '100%' }}>
+          {cellContent}
+        </div>
+      );
+    }
+  
+    return cellContent;
+  };
+  
   const handleEventClick = (arg) => {
     console.log('Logged-in user ID:', TokenManager.getClaims()?.userId);
     console.log('Selected reservation owner ID:', arg.event.extendedProps.user.id);
@@ -179,20 +207,9 @@ function ReservationCalendar(props) {
     }
   };
 
-  const handleFilterChange = () => {
-    // Implement the logic for applying filters
-    // You can use setEventTypeFilter, setStartDateFilter, and setEndDateFilter here
-    // For example, you can make an API call to fetch filtered reservations
-    // and update the state with the new data.
-    fetchReservationsData({
-      eventType: eventTypeFilter,
-      startDate: startDateFilter,
-      endDate: endDateFilter,
-    });
-  };
-
   const handleStartDateChange = (e) => {
     const selectedStartDate = e.target.value;
+    console.log('Selected Start Date:', selectedStartDate);
     setStartDateFilter(selectedStartDate);
 
     // If an end date is already selected and it is earlier than the start date, show a toast error
@@ -204,6 +221,7 @@ function ReservationCalendar(props) {
 
   const handleEndDateChange = (e) => {
     const selectedEndDate = e.target.value;
+    console.log('Selected End Date:', selectedEndDate);
     setEndDateFilter(selectedEndDate);
 
     // If a start date is selected and the end date is earlier than the start date, show a toast error
@@ -225,6 +243,40 @@ function ReservationCalendar(props) {
     fetchReservationsData({});
   };
 
+  const isDateSelectable = (start, end) => {
+    if (startDateFilter && endDateFilter) {
+      const startRange = new Date(startDateFilter);
+      const endRange = new Date(endDateFilter);
+      endRange.setHours(23, 59, 59, 999);
+  
+      // Check if the date range falls within the specified filters
+      if (start >= startRange && end <= endRange && start <= endRange) {
+        // Check if there is a reservation on any date within the selected range
+        const hasReservationWithinRange = reservations.some(
+          (reservation) =>
+            new Date(reservation.reservationDate) >= start && new Date(reservation.reservationDate) <= end
+        );
+  
+        return !hasReservationWithinRange;
+      }
+    }
+  
+    return false;
+  };
+
+  const handleDateRangeSelection = (selectInfo) => {
+    const { start, end } = selectInfo;
+  
+    // Validate the selected range against the specified filters
+    if (isDateSelectable(start, end)) {
+      // Process the selected range (e.g., show a form)
+      setSelectedDate(start);
+      setShowEventForm(true);
+    } else {
+      // Display a toast for an invalid selection
+      toast.error('Invalid date range selection. Please choose a valid range.');
+    }
+  };
 
 
   return (
@@ -247,15 +299,6 @@ function ReservationCalendar(props) {
           <option value="OTHER">Other</option>
         </select>
       </label>
-        {/* <label className="col-3">
-          Event Type:
-          <select value={eventTypeFilter} onChange={(e) => setEventTypeFilter(e.target.value)}>
-            <option value="WEDDING">Wedding</option>
-            <option value="GRADUATION_CEREMONY">Graduation Ceremony</option>
-            <option value="COCKTAIL_EVENT">Cocktail Event</option>
-            <option value="OTHER">Other</option>
-        </select>
-        </label> */}
         <label className="col-3">
         Start Date:
         <input id="startDateInput" type="date" value={startDateFilter} onChange={handleStartDateChange} />
@@ -264,17 +307,6 @@ function ReservationCalendar(props) {
         End Date:
         <input id="endDateInput" type="date" value={endDateFilter} onChange={handleEndDateChange} />
       </label>
-        {/* <label className="col-3">
-          Start Date:
-          <input type="date" value={startDateFilter} onChange={(e) => setStartDateFilter(e.target.value)} />
-        </label>
-        <label className="col-3">
-          End Date:
-          <input type="date" value={endDateFilter} onChange={(e) => setEndDateFilter(e.target.value)} />
-        </label> */}
-        {/* <button className="col-2 btn btn-primary mt-3 mb-1" onClick={handleFilterChange}>
-          Apply Filters
-        </button> */}
         <button className="col-3 btn btn-secondary mt-3 mb-1" onClick={handleReset}>
           Reset Filters
         </button>
@@ -292,10 +324,10 @@ function ReservationCalendar(props) {
           events={eventList}
           eventContent={eventContent}
           eventClick={(info) => handleEventClick(info)}
-          // validRange={{
-          //   start: startDateFilter ? startDateFilter : null,
-          //   end: endDateFilter ? endDateFilter : null,
-          // }}
+          dayCellContent={dayCellContent}
+          selectable={true}
+          select={(info) => handleDateRangeSelection(info)}
+          selectAllow={(selectInfo) => isDateSelectable(selectInfo.start, selectInfo.end)}
         />
         {showEventForm && (
           <ReservationDetailsForm
@@ -314,7 +346,6 @@ function ReservationCalendar(props) {
           <ReservationDetailsForm
             selectedDate={selectedDate}
             onClose={handleAddEventModalClose}
-            // onSave={handleAddEvent}
             isAddEventButtonClicked={true}
             userItems={userItems}
           />

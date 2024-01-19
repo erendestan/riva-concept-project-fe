@@ -56,13 +56,14 @@ function CreateAccount() {
             error.response.status == 400
             //&&  error.response.data.errors[0].error == "EMAIL_ALREADY_IN_SYSTEM"
           ) {
-            alert("The email you entered is already in our system.");
+            toast.error("The email you entered is already in our system.");
           } else {
-            alert("Something went wrong!");
+            toast.error("The email you entered is already in our system.");
           }
         });
     } else {
       setPasswordMatch(false);
+      toast.error("Passwords do not match!");
     }
   };
 
@@ -166,7 +167,7 @@ function CreateAccount() {
               <p className="text-danger ms-5">Passwords do not match.</p>
             )}
 
-            <MDBBtn
+            {/* <MDBBtn
               data-testid="create-account-button"
               onClick={handleSubmit}
               className="mb-4 px-5 mx-5 w-100"
@@ -174,7 +175,15 @@ function CreateAccount() {
               size="lg"
             >
               Create Account
-            </MDBBtn>
+            </MDBBtn> */}
+
+            <button
+              data-testid="create-account-button"
+              onClick={handleSubmit}
+              className="mb-4 px-5 mx-5 w-100 btn btn-info btn-lg" // Adjust class names as needed
+            >
+              Create Account
+            </button>
 
             <p className="ms-5">
               Already have an account?{" "}

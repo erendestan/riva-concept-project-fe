@@ -67,12 +67,13 @@ export default function UserProfile(props) {
 
   const containerStyle = {
     overflowY: 'auto',
-    marginTop: '70px',
+    marginTop: '120px',
     marginBottom: '20px'
   };
 
   return (
-    <div className="user-profile-container mt-3">
+    <div style={containerStyle} className="user-profile-container">
+      <h1 className="text-center">User Profile</h1>
       <table className="table table-striped mt-3">
         <thead className="sticky-top">
           <tr>

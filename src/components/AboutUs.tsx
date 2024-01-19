@@ -4,6 +4,12 @@ import Card from "react-bootstrap/Card";
 import RivaOutside from "../assets/images/8.jpg";
 import RivaTable from "../assets/images/7.jpg";
 
+const containerStyle = {
+  overflowY: "auto",
+  marginTop: "100px",
+  marginBottom: "20px",
+};
+
 const AboutUs = () => {
   return (
     <section id="aboutus">
@@ -36,10 +42,12 @@ const AboutUs = () => {
                     height: "100%",
                   }}
                 >
-                  <Card.Title>Card Title</Card.Title>
+                  <Card.Title>Elegant Hall</Card.Title>
                   <Card.Text>
-                    Some quick example text to build on the card title and make
-                    up the bulk of the card's content.
+                    Discover the allure of our indoor venue, featuring an
+                    elegant hall for your celebration. Let us craft the perfect
+                    setting for your special day, blending charm and
+                    sophistication seamlessly.
                   </Card.Text>
                 </Card.Body>
               </div>
@@ -71,10 +79,11 @@ const AboutUs = () => {
                     height: "100%",
                   }}
                 >
-                  <Card.Title>Card Title</Card.Title>
+                  <Card.Title>Chic and Intimate Setting</Card.Title>
                   <Card.Text>
-                    Some quick example text to build on the card title and make
-                    up the bulk of the card's content.
+                    Embrace the elegance and charm of our indoor venue with a
+                    chic and intimate setting. The bride's desk creates a unique
+                    atmosphere for your special celebration.
                   </Card.Text>
                 </Card.Body>
               </div>

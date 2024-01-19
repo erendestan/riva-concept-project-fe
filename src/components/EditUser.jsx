@@ -85,11 +85,18 @@ export default function EditUser(props){
       }
     }
 
+    const containerStyle = {
+      overflowY: 'auto',
+      marginTop: '100px',
+      marginBottom: '20px'
+    };
+
     return(
-        <div className="container mt-3">
+      <div style={containerStyle} className="container">
+          
       <div className="row">
         <div className="col-md-6 offset-md-3">
-
+        <h1 className="text-center">Edit User</h1>
           <form>
             <div className="form-group mb-2">
               <label htmlFor="firstName">First name:</label>
@@ -145,7 +152,7 @@ export default function EditUser(props){
                 />
               </div>
 
-            <div className="form-group mb-2">
+            {/* <div className="form-group mb-2">
               <label htmlFor="password">Password:</label>
               <input
                 type="password"
@@ -157,7 +164,7 @@ export default function EditUser(props){
                     setUser({ ...user, password: e.target.value })
                 }
               />
-            </div>
+            </div> */}
             {isAdmin && (
               <div className="form-group mb-3">
                 <label htmlFor="role">Select your role:</label>
