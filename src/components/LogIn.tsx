@@ -18,7 +18,6 @@ export default function LogIn(props) {
   const { setLoginId } = props;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  // const [showPassword, setShowPassword] = useState(false); // State to manage password visibility
 
   const navigate = useNavigate();
 

@@ -41,20 +41,22 @@ const links = [
     path: "https://www.instagram.com/rivaconcept.bg/",
     icon: <FontAwesomeIcon icon={faInstagram} style={{ color: "#ffffff" }} />,
     eventkey: 1,
+    target: "_blank",
   },
   {
     id: 5,
     path: "https://www.facebook.com/RivaHaskovo",
     icon: <FontAwesomeIcon icon={faFacebook} style={{ color: "#ffffff" }} />,
     eventkey: 2,
+    target: "_blank",
   },
-  {
-    id: 6,
-    path: "#contactus",
-    text: "Contact Us",
-    icon: <FontAwesomeIcon icon={faPhone} style={{ color: "#ffffff" }} />,
-    eventkey: 3,
-  },
+  // {
+  //   id: 6,
+  //   path: "#contactus",
+  //   text: "Contact Us",
+  //   icon: <FontAwesomeIcon icon={faPhone} style={{ color: "#ffffff" }} />,
+  //   eventkey: 3,
+  // },
   {
     id: 7,
     path: "/login",
@@ -83,7 +85,7 @@ const links = [
   {
     id: 12,
     path: "/chatRoom",
-    text: "Chatroom",
+    text: "Admin Support",
   },
   {
     id: 13,
@@ -131,6 +133,7 @@ const NavbarRiva = () => {
                       link.id === 6 ? "text-white" : ""
                     }`}
                     href={link.path}
+                    target={link.target}
                   >
                     {link.icon}
                     {link.id === 6 && <span> {link.text}</span>}

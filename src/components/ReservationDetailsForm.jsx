@@ -92,6 +92,17 @@ const filteredUsers = userItems.filter(
     user.phoneNumber.toLowerCase().includes(userFilter.toLowerCase())
 );
 
+const handleEndTimeChange = (newEndTime) => {
+    if (newEndTime < startTime) {
+      // Show a toast notification for the validation error
+      toast.error('End time cannot be earlier than start time');
+      return;
+    }
+    setEndTime(newEndTime);
+  };
+
+  
+
 return (
   <CustomModal
     isOpen={true}
@@ -175,98 +186,22 @@ return (
       </div>
 
       <div className="row mb-3">
-        <div className="col-6">
-          <label>
-            Start Time:
-            <input type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)} />
-          </label>
-        </div>
-        <div className="col-6">
-          <label>
-            End Time:
-            <input type="time" value={endTime} onChange={(e) => setEndTime(e.target.value)} />
-          </label>
-        </div>
-      </div>
+  <div className="col-6">
+    <label>
+      Start Time:
+      <input type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)} />
+    </label>
+  </div>
+  <div className="col-6">
+    <label>
+      End Time:
+      <input type="time" value={endTime} onChange={(e) => handleEndTimeChange(e.target.value)} />
+    </label>
+  </div>
+</div>
     </div>
   </CustomModal>
 );
-
-// return (
-//   <CustomModal
-//     isOpen={true}
-//     toggle={onClose}
-//     title="Create Event"
-//     submitText="Save Event"
-//     onCancel={onClose}
-//     onSubmit={handleSave}
-//   >
-//     <div>
-//       {isAddEventButtonClicked ? (
-//         <label>
-//           Select Date:
-//           <input
-//             type="date"
-//             value={selectedFormDate.toISOString().split('T')[0]}
-//             onChange={(e) => setSelectedFormDate(new Date(e.target.value))}
-//           />
-//         </label>
-//       ) : (
-//         <p>Date: {selectedFormDate && selectedFormDate.toLocaleDateString()}</p>
-//       )}
-
-//       {claims && claims.roles && claims.roles.includes('ADMIN') && (
-//         <>
-//           <label>
-//             Filter Users:
-//             <input
-//               type="text"
-//               value={userFilter}
-//               onChange={(e) => setUserFilter(e.target.value)}
-//               placeholder="Enter user's info"
-//             />
-//           </label>
-//           <label>
-//             Select User:
-//             <select
-//               value={selectedUserId || ''}
-//               onChange={(e) => setSelectedUserId(e.target.value)}
-//             >
-//               <option value="">Select User</option>
-//               {filteredUsers.map((user) => (
-//                 <option key={user.id} value={user.id}>
-//                   {`${user.firstName} ${user.lastName}`}
-//                   {/* {`${user.firstName} ${user.lastName} (${user.email}, ${user.phoneNumber})`} */}
-//                 </option>
-//               ))}
-//             </select>
-//           </label>
-//         </>
-//       )}
-
-//       <label>
-//         Event Type:
-//         <select value={eventType} onChange={(e) => setEventType(e.target.value)}>
-//           <option value="WEDDING">Wedding</option>
-//           <option value="GRADUATION_CEREMONY">Graduation Ceremony</option>
-//           <option value="COCKTAIL_EVENT">Cocktail Event</option>
-//           <option value="OTHER">Other</option>
-//         </select>
-//       </label>
-//       <br />
-//       <label>
-//         Start Time:
-//         <input type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)} />
-//       </label>
-//       <br />
-//       <label>
-//         End Time:
-//         <input type="time" value={endTime} onChange={(e) => setEndTime(e.target.value)} />
-//       </label>
-//     </div>
-//   </CustomModal>
-// );
-
 };
 
 export default ReservationDetailsForm;

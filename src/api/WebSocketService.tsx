@@ -53,7 +53,6 @@ class WebSocketService {
     } else {
       console.warn("STOMP client is not connected. Unable to send message.");
     }
-    // this.stompClient.publish({ destination, body: JSON.stringify(message) });
   };
 
   unsubscribeFromUserDestination = (email: string) => {

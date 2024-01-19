@@ -193,7 +193,6 @@ function ReservationCalendar(props) {
   const fetchReservationsData = async (filters) => {
     try {
       // Fetch filtered reservations based on selected filters
-      // const filteredReservationsData = await ReservationAPI.getFilteredReservations(filters);
       const filteredReservationsData = await ReservationAPI.getFilteredReservations(
         filters.eventType,
         filters.startDate,
@@ -256,6 +255,16 @@ function ReservationCalendar(props) {
           (reservation) =>
             new Date(reservation.reservationDate) >= start && new Date(reservation.reservationDate) <= end
         );
+  
+        // Check if the selected date is today or in the next two days
+        const currentDate = new Date();
+        const nextTwoDays = new Date();
+        nextTwoDays.setDate(currentDate.getDate() + 2);
+  
+        if (start < nextTwoDays) {
+          toast.error('Reservations for the next 2 days are not possible due to preparation times.');
+          return false;
+        }
   
         return !hasReservationWithinRange;
       }

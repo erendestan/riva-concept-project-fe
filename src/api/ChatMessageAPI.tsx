@@ -8,12 +8,6 @@ const ChatMessageAPI = {
         headers: { Authorization: `Bearer ${TokenManager.getAccessToken()}` },
       })
       .then((response) => response.data),
-  // getUserByEmail: (email) =>
-  // axios
-  //   .get("http://localhost:8080/email/" + email, {
-  //     headers: { Authorization: `Bearer ${TokenManager.getAccessToken()}` },
-  //   })
-  //   .then((response) => response.data),
 };
 
 export default ChatMessageAPI;

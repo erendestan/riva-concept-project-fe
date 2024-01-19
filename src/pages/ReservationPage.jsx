@@ -42,7 +42,6 @@ export default function ReservationPage(props) {
     return (
       <div className="container">
         {<ReservationCalendar userItems={userItems} />}
-        {/* {<ReservationDetailsForm userItems={userItems}/>} */}
       </div>
     );
   }

@@ -151,20 +151,6 @@ export default function EditUser(props){
                   onChange={(e) => setUser({ ...user, phoneNumber: e.target.value })}
                 />
               </div>
-
-            {/* <div className="form-group mb-2">
-              <label htmlFor="password">Password:</label>
-              <input
-                type="password"
-                className="form-control"
-                id="password"
-                placeholder="Enter user's password"
-                value={user.password}
-                onChange={(e) =>
-                    setUser({ ...user, password: e.target.value })
-                }
-              />
-            </div> */}
             {isAdmin && (
               <div className="form-group mb-3">
                 <label htmlFor="role">Select your role:</label>

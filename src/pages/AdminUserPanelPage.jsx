@@ -71,7 +71,6 @@ export default function AdminUserPanelPage(props){
             <button className='btn btn-success' style={isActive === false ? { display: 'none' } : { display: 'block' }} onClick={navigateToAddUserPage}>+ Add User</button>
           </div>
         </div>
-        {/* <ReservationCalendar users={userItems} /> */}
       </div>
     )
 

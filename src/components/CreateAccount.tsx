@@ -71,7 +71,6 @@ function CreateAccount() {
     <MDBContainer fluid>
       <MDBRow>
         <MDBCol sm="6">
-          {/* <form onSubmit={handleSubmit}> */}
           <div className="d-flex flex-row ps-5 pt-5">
             <MDBIcon fas icon="crow fa-3x me-3" style={{ color: "#709085" }} />
           </div>
@@ -92,8 +91,6 @@ function CreateAccount() {
               onChange={(e) => {
                 setFirstName(e.target.value);
               }}
-              // onChange={handleInputChange}
-              // id="formControlDefault"
               id="firstName"
             />
             <MDBInput
@@ -105,8 +102,6 @@ function CreateAccount() {
               onChange={(e) => {
                 setLastName(e.target.value);
               }}
-              // onChange={handleInputChange}
-              // id="formControlDefault"
               id="lastName"
             />
             <MDBInput
@@ -118,8 +113,6 @@ function CreateAccount() {
               onChange={(e) => {
                 setEmail(e.target.value);
               }}
-              // onChange={handleInputChange}
-              // id="formControlDefault"
               id="email"
             />
             <MDBInput
@@ -131,8 +124,6 @@ function CreateAccount() {
               onChange={(e) => {
                 setPhoneNumber(e.target.value);
               }}
-              // onChange={handleInputChange}
-              // id="formControlDefault"
               id="phoneNumber"
             />
             <MDBInput
@@ -144,8 +135,6 @@ function CreateAccount() {
               onChange={(e) => {
                 setPassword(e.target.value);
               }}
-              // onChange={handleInputChange}
-              // id="formControlDefault"
               id="password"
             />
             <MDBInput
@@ -157,8 +146,6 @@ function CreateAccount() {
               onChange={(e) => {
                 setRepeatPassword(e.target.value);
               }}
-              // onChange={handleInputChange}
-              // id="formControlDefault"
               id="repeatPassword"
             />
 
@@ -166,16 +153,6 @@ function CreateAccount() {
             {!passwordMatch && (
               <p className="text-danger ms-5">Passwords do not match.</p>
             )}
-
-            {/* <MDBBtn
-              data-testid="create-account-button"
-              onClick={handleSubmit}
-              className="mb-4 px-5 mx-5 w-100"
-              color="info"
-              size="lg"
-            >
-              Create Account
-            </MDBBtn> */}
 
             <button
               data-testid="create-account-button"
@@ -192,7 +169,6 @@ function CreateAccount() {
               </a>
             </p>
           </div>
-          {/* </form> */}
         </MDBCol>
 
         <MDBCol sm="6" id="image" className="d-none d-sm-block px-0">
@@ -207,5 +183,4 @@ function CreateAccount() {
     </MDBContainer>
   );
 }
-// }
 export default CreateAccount;

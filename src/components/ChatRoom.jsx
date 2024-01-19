@@ -146,43 +146,6 @@ const ChatRoom = () => {
   const registerUser = async () => {
     connect();
     setTab('ADMIN'); // Connect to the admin tab by default
-  
-    // const fetchChatHistory = async () => {
-    //   try {
-    //     const claims = TokenManager.getClaims();
-    //     console.log('Token Claims:', claims);
-    
-    //     if (claims && claims.email) {
-    //       const history = await ChatMessageAPI.getChatHistory(claims.email);
-    //       setChatHistory(history);
-    //       console.log('Chat History:', history);
-    
-    //       if (claims.email === 'designdocument@gmail.com') {
-    //         const adminHistory = await ChatMessageAPI.getChatHistory('designdocument@gmail.com');
-    //         console.log('Admin Chat History:', adminHistory);
-    
-    //         // Extract unique users from the admin chat history
-    //         const adminTabs = Array.from(new Set(adminHistory.map(chat => chat.senderEmail)))
-    //           .filter(email => email !== 'designdocument@gmail.com');
-    
-    //         console.log('admin tabs:', adminTabs);
-    
-    //         // Update the state with the extracted users as tabs
-    //         setTabs(() => ['ADMIN', ...adminTabs]); // Include 'ADMIN' as a default tab
-    //         setAdminChats(adminHistory);
-    //       } else {
-    //         // For regular users, extract unique users from the chat history
-    //         const userTabs = Array.from(new Set(history.map(chat => chat.senderEmail)))
-    //           .filter(email => email !== claims.email);
-    
-    //         // Update the state with the extracted users as tabs
-    //         setTabs(['ADMIN', ...userTabs]); // Include 'ADMIN' as a default tab
-    //       }
-    //     }
-    //   } catch (error) {
-    //     console.error('Error fetching chat history:', error);
-    //   }
-    // };
 
     const fetchChatHistory = async () => {
       try {
@@ -279,7 +242,8 @@ const ChatRoom = () => {
                   <li className={`message ${chat.senderEmail === userData.email && 'self'}`} key={index}>
                     {chat.senderEmail !== userData.email && <div className="avatar">{chat.senderEmail}</div>}
                     <div className="message-data">{chat.message}</div>
-                    {chat.senderEmail === userData.email && <div className="avatar self">{chat.senderEmail}</div>}
+                    {/* {chat.senderEmail === userData.email && <div className="avatar self">{chat.senderEmail}</div>} */}
+                    {chat.senderEmail === userData.email && <div className="avatar self">You</div>}
                   </li>
                 ))}
               </ul>
@@ -290,7 +254,8 @@ const ChatRoom = () => {
                     <li className={`message ${chat.senderEmail === userData.email && 'self'}`} key={index}>
                       {chat.senderEmail !== userData.email && <div className="avatar">{chat.senderEmail}</div>}
                       <div className="message-data">{chat.message}</div>
-                      {chat.senderEmail === userData.email && <div className="avatar self">{chat.senderEmail}</div>}
+                      {/* {chat.senderEmail === userData.email && <div className="avatar self">{chat.senderEmail}</div>} */}
+                      {chat.senderEmail === userData.email && <div className="avatar self">You</div>}
                     </li>
                   ))}
               </ul>

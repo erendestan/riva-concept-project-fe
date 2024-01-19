@@ -17,7 +17,7 @@ const Carrousel = () => {
         <h2 className="mb-5">Photo Gallery</h2>
 
         <div className="centeringContainerStyle">
-          <Carousel style={customCarouselStyle} fade>
+          <Carousel style={customCarouselStyle} fade interval={2000}>
             <Carousel.Item>
               <img
                 className="d-block w-100"
@@ -36,7 +36,7 @@ const Carrousel = () => {
               <img
                 className="d-block w-100"
                 src={CarrouselImage2}
-                alt="First Slide"
+                alt="Third Slide"
               ></img>
             </Carousel.Item>
           </Carousel>
